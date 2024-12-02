@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ben Hota Family Hub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #121212;
+      color: #e0e0e0;
+      line-height: 1.6;
+    }
+    header {
+      background-color: #1d1d1d;
+      color: #fff;
+      padding: 3rem 2rem;
+      text-align: center;
+      border-bottom: 3px solid #333;
+    }
+    header h1 {
+      font-family: 'Roboto', sans-serif;
+      font-size: 3rem;
+      font-weight: 600;
+      letter-spacing: 2px;
+      margin-bottom: 0.5rem;
+    }
+    header p {
+      font-size: 1.2rem;
+      font-weight: 300;
+      color: #b3b3b3;
+    }
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 2rem;
+    }
+    .card {
+      background-color: #333;
+      border-radius: 15px;
+      width: 250px;
+      margin: 1rem;
+      padding: 2rem;
+      text-align: center;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    }
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+    }
+    .card img {
+      width: 80px;
+      height: 80px;
+      margin-bottom: 1.5rem;
+    }
+    .card h2 {
+      font-size: 1.5rem;
+      color: #f2f2f2;
+      margin-bottom: 1rem;
+    }
+    .card a {
+      font-size: 1rem;
+      color: #b3b3b3;
+      text-decoration: none;
+      font-weight: 500;
+      display: block;
+      margin-top: 1rem;
+      transition: color 0.3s ease;
+    }
+    .card a:hover {
+      color: #00e6b8;
+    }
+    footer {
+      background-color: #1d1d1d;
+      color: #fff;
+      text-align: center;
+      padding: 2rem;
+      margin-top: 3rem;
+      border-top: 3px solid #333;
+    }
+    footer a {
+      color: #00e6b8;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+    footer a:hover {
+      color: #1b1b1b;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Ben Hota Family Hub</h1>
+  <p>Your Home. Connected. All in One Place.</p>
+</header>
+
+<div class="container">
+  <!-- Home Assistant -->
+  <div class="card">
+    <img src="https://img.icons8.com/ios/100/home-automation.png" alt="Home Assistant">
+    <h2>Home Assistant</h2>
+    <a href="http://149.106.140.176:8123" target="_blank">Control Your Home</a>
+  </div>
+
+  <!-- 3D Printer -->
+  <div class="card">
+    <img src="https://img.icons8.com/ios/100/3d-printer.png" alt="3D Printer">
+    <h2>3D Printer</h2>
+    <a href="http://mainsail.local" target="_blank">Start Printing</a>
+  </div>
+
+  <!-- Family Media Server -->
+  <div class="card">
+    <img src="https://img.icons8.com/ios/100/server.png" alt="Media Server">
+    <h2>Family Media Hub</h2>
+    <a href="http://media.local" target="_blank">Stream Movies</a>
+  </div>
+
+  <!-- Custom Service -->
+  <div class="card">
+    <img src="https://img.icons8.com/ios/100/smart-home.png" alt="Smart Home">
+    <h2>Ben Hota Services</h2>
+    <a href="http://your-service.local" target="_blank">Explore More</a>
+  </div>
+</div>
+
+<footer>
+  <p>&copy; 2024 Ben Hota Family | All rights reserved.</p>
+  <p><a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+</footer>
+
+</body>
+</html>
