@@ -20,7 +20,7 @@
 				<!-- Header -->
 					<header id="header">
 						<div class="logo">
-							<span class="icon fa-gem"></span>
+							 <span id="date"></span>
 						</div>
 						<div class="content">
 							<div class="inner">
@@ -64,7 +64,7 @@
 
 				<!-- Footer -->
 					<footer id="footer">
-						<p class="copyright">&copy; Untitled. Design: <a href="https://html5up.net">HTML5 UP</a>.</p>
+						<p><img src="images/benhota.png" alt="Logo Icon" style="width: 200px; height: 200px;" /></p>
 					</footer>
 
 			</div>
@@ -78,6 +78,12 @@
 			<script src="assets/js/breakpoints.min.js"></script>
 			<script src="assets/js/util.js"></script>
 			<script src="assets/js/main.js"></script>
+			<script>
+				// Get today's date
+				const today = new Date();
+				const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
+				document.getElementById('date').textContent = today.toLocaleDateString('he-IL', options);
+			</script>
 			
 	</body>
 </html>
