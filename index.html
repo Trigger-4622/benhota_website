@@ -519,7 +519,138 @@
 		}
 
 		/* ══════════════════════════════════════
-		   DASHBOARD TILES (home view)
+		   FLOATING WEATHER BAR
+		   ══════════════════════════════════════ */
+		.weather-bar {
+			position: sticky;
+			top: 0.75rem;
+			z-index: 50;
+			max-width: 900px;
+			width: 100%;
+			margin: 0 auto 1.25rem;
+			background: var(--bg-glass);
+			border: 1px solid var(--border);
+			border-radius: 100px;
+			padding: 0.5rem 1.25rem;
+			backdrop-filter: blur(20px);
+			-webkit-backdrop-filter: blur(20px);
+			display: flex;
+			align-items: center;
+			gap: 0.75rem;
+			cursor: pointer;
+			transition: var(--transition);
+			animation: fadeInUp 0.6s ease-out 0.15s both;
+			box-shadow: 0 4px 24px rgba(0,0,0,0.15);
+		}
+		.weather-bar:hover {
+			border-color: var(--border-hover);
+			box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+		}
+		.weather-bar .wb-icon { font-size: 1.2rem; }
+		.weather-bar .wb-temp {
+			font-weight: 700;
+			font-size: 0.95rem;
+			color: var(--text-primary);
+		}
+		.weather-bar .wb-desc {
+			font-size: 0.75rem;
+			color: var(--text-secondary);
+		}
+		.weather-bar .wb-location {
+			margin-left: auto;
+			font-family: var(--mono);
+			font-size: 0.65rem;
+			color: var(--text-muted);
+		}
+
+		/* ══════════════════════════════════════
+		   DASHBOARD LAYOUT
+		   ══════════════════════════════════════ */
+		.dashboard-wrapper {
+			max-width: 900px;
+			width: 100%;
+			margin: 0 auto 2rem;
+			animation: fadeInUp 0.8s ease-out 0.3s both;
+		}
+
+		/* Hero — 2 big tiles */
+		.hero-grid {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 1rem;
+			margin-bottom: 1rem;
+		}
+
+		/* Projects banner */
+		.projects-banner {
+			display: flex;
+			align-items: center;
+			gap: 1rem;
+			background: var(--bg-glass);
+			border: 1px solid var(--border);
+			border-radius: var(--radius);
+			padding: 1.1rem 1.5rem;
+			margin-bottom: 1rem;
+			cursor: pointer;
+			transition: var(--transition);
+			text-decoration: none;
+			color: inherit;
+			backdrop-filter: blur(12px);
+			-webkit-backdrop-filter: blur(12px);
+			position: relative;
+			overflow: hidden;
+		}
+		.projects-banner::before {
+			content: '';
+			position: absolute;
+			top: 0; left: 0; right: 0; height: 2px;
+			background: linear-gradient(90deg, var(--accent2), var(--accent3));
+			opacity: 0;
+			transition: opacity var(--transition);
+		}
+		.projects-banner:hover {
+			border-color: var(--border-hover);
+			background: var(--bg-card-hover);
+			transform: translateY(-2px);
+			box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+		}
+		.projects-banner:hover::before { opacity: 1; }
+		.projects-banner .tile-icon { width: 40px; height: 40px; border-radius: 10px; font-size: 1.15rem; }
+		.projects-banner .banner-info h3 { font-size: 0.92rem; font-weight: 600; }
+		.projects-banner .banner-info p { font-size: 0.72rem; color: var(--text-muted); margin: 0; }
+		.projects-banner .tile-arrow {
+			position: static;
+			margin-left: auto;
+			transform: none;
+			color: var(--text-muted);
+			font-size: 0.9rem;
+			transition: var(--transition);
+		}
+		.projects-banner:hover .tile-arrow {
+			color: var(--accent);
+			transform: translateX(3px);
+		}
+
+		/* Section label */
+		.section-label {
+			font-size: 0.65rem;
+			font-family: var(--mono);
+			text-transform: uppercase;
+			letter-spacing: 0.1em;
+			color: var(--text-muted);
+			margin-bottom: 0.6rem;
+			padding-left: 0.25rem;
+		}
+
+		/* Secondary — smaller tiles */
+		.secondary-grid {
+			display: grid;
+			grid-template-columns: repeat(4, 1fr);
+			gap: 0.75rem;
+		}
+
+		/* ══════════════════════════════════════
+		   DASHBOARD TILES (shared)
 		   ══════════════════════════════════════ */
 		.dashboard {
 			display: grid;
@@ -602,6 +733,48 @@
 			font-size: 0.75rem;
 			color: var(--text-muted);
 			margin: 0;
+		}
+
+		/* Hero tiles — larger look */
+		.hero-grid .dash-tile {
+			padding: 1.75rem;
+		}
+		.hero-grid .tile-icon {
+			width: 52px;
+			height: 52px;
+			border-radius: 14px;
+			font-size: 1.5rem;
+		}
+		.hero-grid .tile-info h3 {
+			font-size: 1.1rem;
+		}
+		.hero-grid .tile-info p {
+			font-size: 0.78rem;
+		}
+
+		/* Secondary tiles — compact */
+		.secondary-grid .dash-tile {
+			padding: 1rem 1rem 0.85rem;
+			gap: 0.4rem;
+		}
+		.secondary-grid .tile-header {
+			gap: 0.5rem;
+		}
+		.secondary-grid .tile-icon {
+			width: 34px;
+			height: 34px;
+			border-radius: 8px;
+			font-size: 1rem;
+		}
+		.secondary-grid .tile-info h3 {
+			font-size: 0.82rem;
+		}
+		.secondary-grid .tile-info p {
+			font-size: 0.68rem;
+		}
+		.secondary-grid .tile-arrow {
+			font-size: 0.75rem;
+			right: 0.85rem;
 		}
 
 		.tile-status {
@@ -1028,9 +1201,15 @@
 		/* ══════════════════════════════════════
 		   RESPONSIVE
 		   ══════════════════════════════════════ */
+		@media (max-width: 900px) {
+			.secondary-grid { grid-template-columns: 1fr 1fr; }
+		}
+
 		@media (max-width: 640px) {
 			.site-header { padding: 2.5rem 0 1.5rem; }
 			.site-title { font-size: 1.75rem; }
+			.hero-grid { grid-template-columns: 1fr; }
+			.secondary-grid { grid-template-columns: 1fr 1fr; }
 			.dashboard { grid-template-columns: 1fr; gap: 0.75rem; }
 			.modal-panel { padding: 1.75rem; border-radius: 12px; }
 			.modal-overlay { padding: 1rem; }
@@ -1041,6 +1220,11 @@
 			.nav-btn { padding: 0.5rem 0.9rem; font-size: 0.75rem; }
 			.cursor-glow { display: none; }
 			.cmd-box { max-width: calc(100% - 2rem); }
+			.weather-bar { border-radius: var(--radius-sm); padding: 0.4rem 1rem; }
+		}
+
+		@media (max-width: 380px) {
+			.secondary-grid { grid-template-columns: 1fr; }
 		}
 	</style>
 </head>
@@ -1094,116 +1278,115 @@
 			<button class="nav-btn" data-panel="about"><span class="nav-icon">ℹ️</span> About</button>
 		</nav>
 
-		<!-- Dashboard Tiles -->
-		<section class="dashboard">
-			<!-- Home Assistant -->
-			<div class="dash-tile" data-panel="Home_Assistant">
-				<div class="tile-header">
-					<div class="tile-icon ha">🏠</div>
-					<div class="tile-info">
-						<h3>Home Assistant</h3>
-						<p>Smart home control center</p>
+		<!-- Floating Weather Bar -->
+		<div class="weather-bar" data-panel="weather" id="weather-bar">
+			<span class="wb-icon" id="wb-icon">🌤️</span>
+			<span class="wb-temp" id="tile-weather-temp">--°</span>
+			<span class="wb-desc" id="tile-weather-desc">Fetching...</span>
+			<span class="wb-location" id="tile-weather-location">Loading...</span>
+		</div>
+
+		<!-- Dashboard -->
+		<div class="dashboard-wrapper">
+
+			<!-- ★ Featured Services ★ -->
+			<div class="section-label">Featured Services</div>
+			<div class="hero-grid">
+				<!-- Home Assistant -->
+				<div class="dash-tile" data-panel="Home_Assistant">
+					<div class="tile-header">
+						<div class="tile-icon ha">🏠</div>
+						<div class="tile-info">
+							<h3>Home Assistant</h3>
+							<p>Smart home control center</p>
+						</div>
 					</div>
+					<div class="tile-status">
+						<span class="status-dot checking" id="tile-ha-dot"></span>
+						<span id="tile-ha-text">Checking...</span>
+					</div>
+					<span class="tile-arrow">&rarr;</span>
 				</div>
-				<div class="tile-status">
-					<span class="status-dot checking" id="tile-ha-dot"></span>
-					<span id="tile-ha-text">Checking...</span>
+
+				<!-- 3D Printer -->
+				<div class="dash-tile" data-panel="3D_Printer">
+					<div class="tile-header">
+						<div class="tile-icon printer">🖨️</div>
+						<div class="tile-info">
+							<h3>3D Printer</h3>
+							<p>Ender 3 V2 Neo via Mainsail</p>
+						</div>
+					</div>
+					<div class="tile-status">
+						<span class="status-dot checking" id="tile-printer-dot"></span>
+						<span id="tile-printer-text">Checking...</span>
+					</div>
+					<span class="tile-arrow">&rarr;</span>
 				</div>
-				<span class="tile-arrow">&rarr;</span>
 			</div>
 
-			<!-- 3D Printer -->
-			<div class="dash-tile" data-panel="3D_Printer">
-				<div class="tile-header">
-					<div class="tile-icon printer">🖨️</div>
-					<div class="tile-info">
-						<h3>3D Printer</h3>
-						<p>Ender 3 V2 Neo via Mainsail</p>
-					</div>
-				</div>
-				<div class="tile-status">
-					<span class="status-dot checking" id="tile-printer-dot"></span>
-					<span id="tile-printer-text">Checking...</span>
-				</div>
-				<span class="tile-arrow">&rarr;</span>
-			</div>
-
-			<!-- Network -->
-			<div class="dash-tile" data-panel="network">
-				<div class="tile-header">
-					<div class="tile-icon network">🌐</div>
-					<div class="tile-info">
-						<h3>Network</h3>
-						<p>Service health &amp; quick links</p>
-					</div>
-				</div>
-				<span class="tile-arrow">&rarr;</span>
-			</div>
-
-			<!-- Notes -->
-			<div class="dash-tile" data-panel="notes">
-				<div class="tile-header">
-					<div class="tile-icon notes">📝</div>
-					<div class="tile-info">
-						<h3>Notes</h3>
-						<p>Quick notepad saved in browser</p>
-					</div>
-				</div>
-				<span class="tile-arrow">&rarr;</span>
-			</div>
-
-			<!-- Projects -->
-			<a class="dash-tile" href="/projects/">
-				<div class="tile-header">
-					<div class="tile-icon projects">📂</div>
-					<div class="tile-info">
-						<h3>Projects</h3>
-						<p>Browse all projects</p>
-					</div>
+			<!-- ★ Projects Banner ★ -->
+			<a class="projects-banner" href="/projects/">
+				<div class="tile-icon projects">📂</div>
+				<div class="banner-info">
+					<h3>Projects</h3>
+					<p>Browse all projects &amp; experiments</p>
 				</div>
 				<span class="tile-arrow">&rarr;</span>
 			</a>
 
-			<!-- Weather -->
-			<div class="dash-tile" data-panel="weather">
-				<div class="tile-header">
-					<div class="tile-icon weather">🌤️</div>
-					<div class="tile-info">
-						<h3>Weather</h3>
-						<p id="tile-weather-location">Loading...</p>
+			<!-- ★ Tools & Utilities ★ -->
+			<div class="section-label">Tools &amp; Utilities</div>
+			<div class="secondary-grid">
+				<!-- Network -->
+				<div class="dash-tile" data-panel="network">
+					<div class="tile-header">
+						<div class="tile-icon network">🌐</div>
+						<div class="tile-info">
+							<h3>Network</h3>
+							<p>Service health</p>
+						</div>
 					</div>
+					<span class="tile-arrow">&rarr;</span>
 				</div>
-				<div class="weather-info">
-					<span class="weather-temp" id="tile-weather-temp">--°</span>
-					<span id="tile-weather-desc">Fetching...</span>
-				</div>
-				<span class="tile-arrow">&rarr;</span>
-			</div>
 
-			<!-- Todos -->
-			<div class="dash-tile" data-panel="todos">
-				<div class="tile-header">
-					<div class="tile-icon todo">✅</div>
-					<div class="tile-info">
-						<h3>Todo List</h3>
-						<p id="tile-todo-count">0 tasks</p>
+				<!-- Notes -->
+				<div class="dash-tile" data-panel="notes">
+					<div class="tile-header">
+						<div class="tile-icon notes">📝</div>
+						<div class="tile-info">
+							<h3>Notes</h3>
+							<p>Quick notepad</p>
+						</div>
 					</div>
+					<span class="tile-arrow">&rarr;</span>
 				</div>
-				<span class="tile-arrow">&rarr;</span>
-			</div>
 
-			<!-- About -->
-			<div class="dash-tile" data-panel="about">
-				<div class="tile-header">
-					<div class="tile-icon about">ℹ️</div>
-					<div class="tile-info">
-						<h3>About</h3>
-						<p>The Hota family dashboard</p>
+				<!-- Todos -->
+				<div class="dash-tile" data-panel="todos">
+					<div class="tile-header">
+						<div class="tile-icon todo">✅</div>
+						<div class="tile-info">
+							<h3>Todos</h3>
+							<p id="tile-todo-count">0 tasks</p>
+						</div>
 					</div>
+					<span class="tile-arrow">&rarr;</span>
 				</div>
-				<span class="tile-arrow">&rarr;</span>
+
+				<!-- About -->
+				<div class="dash-tile" data-panel="about">
+					<div class="tile-header">
+						<div class="tile-icon about">ℹ️</div>
+						<div class="tile-info">
+							<h3>About</h3>
+							<p>The Hota family</p>
+						</div>
+					</div>
+					<span class="tile-arrow">&rarr;</span>
+				</div>
 			</div>
-		</section>
+		</div>
 
 		<!-- Footer -->
 		<footer class="site-footer">
@@ -1864,13 +2047,15 @@
 						var icon = weatherIcons[code] || '🌡️';
 						var desc = weatherDesc[code] || 'Unknown';
 
-						// Tile
+						// Floating weather bar + tile
 						var tLoc = document.getElementById('tile-weather-location');
 						var tTemp = document.getElementById('tile-weather-temp');
 						var tDesc = document.getElementById('tile-weather-desc');
+						var wbIcon = document.getElementById('wb-icon');
 						if (tLoc) tLoc.textContent = city;
 						if (tTemp) tTemp.textContent = Math.round(c.temperature_2m) + '°C';
-						if (tDesc) tDesc.textContent = icon + ' ' + desc;
+						if (tDesc) tDesc.textContent = desc;
+						if (wbIcon) wbIcon.textContent = icon;
 
 						// Panel
 						var pCity = document.getElementById('weather-city');
