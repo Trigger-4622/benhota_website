@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Projects — Ben Hota</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: "Source Sans Pro", sans-serif;
+            background: #1b1f22;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 3rem 1.5rem;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 300;
+            letter-spacing: 0.3rem;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .back {
+            font-size: 0.8rem;
+            opacity: 0.5;
+            margin-bottom: 1rem;
+            text-decoration: none;
+            color: inherit;
+            border-bottom: 1px dotted rgba(255,255,255,0.3);
+        }
+        .back:hover { opacity: 0.8; }
+
+        .status {
+            font-size: 0.75rem;
+            opacity: 0.35;
+            margin-bottom: 2rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 1.2rem;
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .card {
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 6px;
+            padding: 1.5rem;
+            transition: border-color 0.2s, background 0.2s;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        .card:hover {
+            border-color: rgba(255,255,255,0.35);
+            background: rgba(255,255,255,0.03);
+        }
+        .card h2 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.1rem;
+        }
+        .card p {
+            font-size: 0.85rem;
+            opacity: 0.6;
+            line-height: 1.5;
+        }
+
+        .tag {
+            display: inline-block;
+            font-size: 0.65rem;
+            opacity: 0.4;
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 3px;
+            padding: 0.15em 0.5em;
+            margin-top: 0.8rem;
+            margin-right: 0.3em;
+            text-transform: uppercase;
+            letter-spacing: 0.05rem;
+        }
+
+        .empty {
+            text-align: center;
+            opacity: 0.3;
+            font-size: 0.9rem;
+            padding: 3rem 0;
+        }
+
+        .error {
+            text-align: center;
+            opacity: 0.5;
+            font-size: 0.85rem;
+            color: #f44336;
+            padding: 2rem 0;
+        }
+
+        .loading {
+            opacity: 0.3;
+            font-size: 0.85rem;
+            padding: 2rem 0;
+            text-align: center;
+        }
+        .loading::after {
+            content: '';
+            animation: dots 1.5s steps(3) infinite;
+        }
+        @keyframes dots {
+            0%   { content: ''; }
+            33%  { content: '.'; }
+            66%  { content: '..'; }
+            100% { content: '...'; }
+        }
+    </style>
+</head>
+<body>
+    <h1>Projects</h1>
+    <a class="back" href="/">← Back to Home</a>
+    <p class="status" id="status"></p>
+    <div class="grid" id="grid">
+        <p class="loading">Loading projects</p>
+    </div>
+
+    <script>
+        var REPO = 'Trigger-4622/benhota_website';
+        var FOLDER = 'projects';
+        var API = 'https://api.github.com/repos/' + REPO + '/contents/' + FOLDER;
+
+        // Convert folder name to display name: "my-cool-app" → "My Cool App"
+        function formatName(name) {
+            return name
+                .replace(/[-_]/g, ' ')
+                .replace(/\b\w/g, function(c) { return c.toUpperCase(); });
+        }
+
+        // Try to fetch optional meta.json from a project folder
+        function fetchMeta(dirName) {
+            var url = API + '/' + dirName + '/meta.json';
+            return fetch(url)
+                .then(function(r) {
+                    if (!r.ok) throw new Error('no meta');
+                    return r.json();
+                })
+                .then(function(data) {
+                    // GitHub API returns content as base64
+                    var decoded = atob(data.content.replace(/\n/g, ''));
+                    return JSON.parse(decoded);
+                })
+                .catch(function() {
+                    return null; // No meta.json — that's fine
+                });
+        }
+
+        // Build a card element
+        function createCard(href, name, description, tags) {
+            var a = document.createElement('a');
+            a.className = 'card';
+            a.href = href;
+
+            var h2 = document.createElement('h2');
+            h2.textContent = name;
+            a.appendChild(h2);
+
+            if (description) {
+                var p = document.createElement('p');
+                p.textContent = description;
+                a.appendChild(p);
+            }
+
+            if (tags && tags.length) {
+                tags.forEach(function(tag) {
+                    var span = document.createElement('span');
+                    span.className = 'tag';
+                    span.textContent = tag;
+                    a.appendChild(span);
+                });
+            }
+
+            return a;
+        }
+
+        // Main: fetch directory listing and build cards
+        fetch(API)
+            .then(function(r) {
+                if (!r.ok) throw new Error('GitHub API returned ' + r.status);
+                return r.json();
+            })
+            .then(function(items) {
+                // Separate folders and standalone HTML files (skip index.html)
+                var dirs = [];
+                var files = [];
+
+                items.forEach(function(item) {
+                    if (item.type === 'dir') {
+                        dirs.push(item.name);
+                    } else if (
+                        item.type === 'file' &&
+                        item.name.endsWith('.html') &&
+                        item.name !== 'index.html'
+                    ) {
+                        files.push(item.name);
+                    }
+                });
+
+                if (dirs.length === 0 && files.length === 0) {
+                    document.getElementById('grid').innerHTML =
+                        '<p class="empty">No projects yet. Add a folder to /projects/ and push.</p>';
+                    document.getElementById('status').textContent = '0 projects';
+                    return;
+                }
+
+                // Fetch meta.json for each directory (in parallel)
+                var promises = dirs.map(function(dirName) {
+                    return fetchMeta(dirName).then(function(meta) {
+                        return {
+                            type: 'dir',
+                            folderName: dirName,
+                            name: (meta && meta.name) ? meta.name : formatName(dirName),
+                            description: (meta && meta.description) ? meta.description : null,
+                            tags: (meta && meta.tags) ? meta.tags : []
+                        };
+                    });
+                });
+
+                // Add standalone HTML files as projects too
+                files.forEach(function(fileName) {
+                    var baseName = fileName.replace('.html', '');
+                    promises.push(Promise.resolve({
+                        type: 'file',
+                        fileName: fileName,
+                        name: formatName(baseName),
+                        description: null,
+                        tags: ['HTML']
+                    }));
+                });
+
+                return Promise.all(promises);
+            })
+            .then(function(projects) {
+                if (!projects) return;
+
+                // Sort alphabetically
+                projects.sort(function(a, b) {
+                    return a.name.localeCompare(b.name);
+                });
+
+                var grid = document.getElementById('grid');
+                grid.innerHTML = '';
+
+                projects.forEach(function(proj) {
+                    var href = proj.type === 'dir'
+                        ? proj.folderName + '/'
+                        : proj.fileName;
+                    grid.appendChild(createCard(href, proj.name, proj.description, proj.tags));
+                });
+
+                var count = projects.length;
+                document.getElementById('status').textContent =
+                    count + ' project' + (count !== 1 ? 's' : '') + ' found';
+            })
+            .catch(function(err) {
+                document.getElementById('grid').innerHTML =
+                    '<p class="error">Failed to load projects: ' + err.message + '</p>';
+            });
+    </script>
+</body>
+</html>
