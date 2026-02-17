@@ -11,8 +11,256 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="assets/css/main.css" />
 		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+		<style>
+			/* ═══════════════════════════════════════
+			   OVERRIDES — work with the template
+			   ═══════════════════════════════════════ */
+
+			/* ── Logo circle: just show a clean icon ── */
+			#header .logo {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				font-size: 1.8rem;
+			}
+
+			/* ── Subtitle & greeting: undo uppercase for readability ── */
+			#header .content p.subtitle {
+				text-transform: none;
+				letter-spacing: 0.05rem;
+				font-size: 0.85rem;
+				line-height: 1.8;
+				margin-bottom: 0.6rem;
+			}
+			#header .content p.greeting {
+				text-transform: none;
+				letter-spacing: 0.04rem;
+				font-size: 0.75rem;
+				line-height: 1.6;
+				opacity: 0.5;
+				font-style: italic;
+				margin-bottom: 0;
+			}
+			#header .content p.date-display {
+				text-transform: none;
+				letter-spacing: 0.08rem;
+				font-size: 0.7rem;
+				opacity: 0.45;
+				margin-bottom: 0.5rem;
+			}
+
+			/* ── Typing cursor ── */
+			.typing-cursor {
+				animation: blink 1s step-end infinite;
+				font-weight: 100;
+			}
+			@keyframes blink { 50% { opacity: 0; } }
+
+			/* ── Nav: shrink min-width so 4 items fit ── */
+			#header nav ul li a {
+				min-width: 5.5rem;
+				padding: 0 1rem 0 1.1rem;
+				font-size: 0.7rem;
+			}
+
+			/* ═══════════════════════════════════════
+			   ARTICLE CONTENT STYLES
+			   ═══════════════════════════════════════ */
+
+			/* ── Service cards ── */
+			.service-card {
+				text-align: left;
+				padding: 1.2em;
+				border: 1px solid rgba(255,255,255,0.12);
+				border-radius: 6px;
+				margin-bottom: 1.2em;
+				transition: border-color 0.3s ease, background 0.3s ease;
+			}
+			.service-card:hover {
+				border-color: rgba(255,255,255,0.3);
+				background: rgba(255,255,255,0.025);
+			}
+			.service-card p {
+				margin-bottom: 0.5rem;
+			}
+
+			/* ── Status dots ── */
+			.status-dot {
+				display: inline-block;
+				width: 8px;
+				height: 8px;
+				border-radius: 50%;
+				margin-right: 8px;
+				vertical-align: middle;
+			}
+			.status-dot.checking {
+				background: #9e9e9e;
+				box-shadow: 0 0 4px #9e9e9e;
+				animation: pulse-dot 1s ease-in-out infinite;
+			}
+			.status-dot.online {
+				background: #4caf50;
+				box-shadow: 0 0 6px #4caf50;
+				animation: pulse-dot 2.5s ease-in-out infinite;
+			}
+			.status-dot.offline {
+				background: #f44336;
+				box-shadow: 0 0 6px #f44336;
+			}
+			@keyframes pulse-dot {
+				0%, 100% { opacity: 1; }
+				50% { opacity: 0.35; }
+			}
+
+			/* ── Feature lists inside cards ── */
+			.feature-list {
+				list-style: none;
+				padding: 0;
+				margin: 0.6em 0 0.2em 0;
+			}
+			.feature-list li {
+				padding: 0.25em 0;
+				font-size: 0.85em;
+				opacity: 0.75;
+			}
+			.feature-list li::before {
+				content: "› ";
+				opacity: 0.4;
+			}
+
+			/* ── Response time label ── */
+			.response-time {
+				font-size: 0.7em;
+				opacity: 0.45;
+				margin-top: 0.15em;
+				margin-bottom: 0.4rem;
+			}
+
+			/* ── Quick action buttons ── */
+			.quick-actions {
+				display: flex;
+				gap: 0.6em;
+				margin-top: 0.8em;
+				flex-wrap: wrap;
+			}
+			.quick-actions a {
+				flex: 1;
+				min-width: 100px;
+				text-align: center;
+				padding: 0.5em 0.8em;
+				border: 1px solid rgba(255,255,255,0.2);
+				border-radius: 4px;
+				font-size: 0.8em;
+				transition: all 0.2s ease;
+				text-decoration: none;
+				border-bottom: 1px solid rgba(255,255,255,0.2);
+			}
+			.quick-actions a:hover {
+				background: rgba(255,255,255,0.075);
+				border-color: rgba(255,255,255,0.4);
+			}
+
+			/* ── Notepad ── */
+			.notepad textarea {
+				width: 100%;
+				min-height: 100px;
+				background: rgba(255,255,255,0.04);
+				border: 1px solid rgba(255,255,255,0.15);
+				border-radius: 4px;
+				color: inherit;
+				font-family: inherit;
+				font-size: 0.85em;
+				padding: 0.8em;
+				resize: vertical;
+				transition: border-color 0.2s ease;
+			}
+			.notepad textarea:focus {
+				outline: none;
+				border-color: rgba(255,255,255,0.4);
+				background: rgba(255,255,255,0.06);
+				box-shadow: 0 0 0 1px rgba(255,255,255,0.15);
+			}
+			.notepad .save-status {
+				font-size: 0.65em;
+				opacity: 0.35;
+				margin-top: 0.4em;
+				margin-bottom: 0;
+				text-align: right;
+			}
+
+			/* ── Tech grid ── */
+			.tech-grid {
+				display: grid;
+				grid-template-columns: 1fr 1fr;
+				gap: 0.7em;
+				margin-top: 1em;
+			}
+			.tech-item {
+				border: 1px solid rgba(255,255,255,0.1);
+				border-radius: 4px;
+				padding: 0.7em;
+				text-align: center;
+				font-size: 0.8em;
+				transition: border-color 0.2s ease;
+			}
+			.tech-item:hover {
+				border-color: rgba(255,255,255,0.25);
+			}
+			.tech-item .tech-icon {
+				font-size: 1.5em;
+				display: block;
+				margin-bottom: 0.3em;
+			}
+
+			/* ── Theme toggle ── */
+			.theme-toggle {
+				position: fixed;
+				bottom: 1em;
+				right: 1em;
+				z-index: 1000;
+				background: rgba(255,255,255,0.08);
+				border: 1px solid rgba(255,255,255,0.15);
+				border-radius: 50%;
+				width: 38px;
+				height: 38px;
+				cursor: pointer;
+				font-size: 1em;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				transition: all 0.2s ease;
+				backdrop-filter: blur(6px);
+			}
+			.theme-toggle:hover {
+				background: rgba(255,255,255,0.15);
+				transform: scale(1.08);
+			}
+
+			/* ── Light mode ── */
+			body.light-mode #bg:after { filter: brightness(1.6) saturate(0.4); }
+			body.light-mode #wrapper { color: #1a1a2e; }
+			body.light-mode .service-card { border-color: rgba(0,0,0,0.1); }
+			body.light-mode .service-card:hover { border-color: rgba(0,0,0,0.2); background: rgba(0,0,0,0.02); }
+			body.light-mode .notepad textarea { background: rgba(0,0,0,0.04); border-color: rgba(0,0,0,0.12); color: #1a1a2e; }
+			body.light-mode .tech-item { border-color: rgba(0,0,0,0.1); }
+			body.light-mode .quick-actions a { border-color: rgba(0,0,0,0.12); }
+			body.light-mode .theme-toggle { background: rgba(0,0,0,0.06); border-color: rgba(0,0,0,0.15); }
+
+			/* ── Footer stats ── */
+			footer#footer .site-stats {
+				letter-spacing: 0.15rem;
+				font-size: 0.6rem;
+				opacity: 0.4;
+				margin-top: 0.4em;
+				margin-bottom: 0;
+				text-transform: uppercase;
+			}
+		</style>
 	</head>
 	<body class="is-preload">
+
+		<!-- Theme Toggle -->
+		<button class="theme-toggle" id="theme-toggle" title="Toggle light/dark mode">🌙</button>
 
 		<!-- Wrapper -->
 			<div id="wrapper">
@@ -20,18 +268,22 @@
 				<!-- Header -->
 					<header id="header">
 						<div class="logo">
-							 <span id="date"></span>
+							<span>🏠</span>
 						</div>
 						<div class="content">
 							<div class="inner">
 								<h1>Ben Hota</h1>
-								<p>A site for all the services at home. </p>
+								<p class="date-display" id="date-display"></p>
+								<p class="subtitle" id="subtitle"></p>
+								<p class="greeting" id="greeting"></p>
 							</div>
 						</div>
 						<nav>
 							<ul>
 								<li><a href="#Home_Assistant">Home Assistant</a></li>
 								<li><a href="#3D_Printer">3D Printer</a></li>
+								<li><a href="#network">Network</a></li>
+								<li><a href="#notes">Notes</a></li>
 								<li><a href="#about">About</a></li>
 							</ul>
 						</nav>
@@ -40,31 +292,115 @@
 				<!-- Main -->
 					<div id="main">
 
-						<!-- Intro -->
+						<!-- Home Assistant -->
 							<article id="Home_Assistant">
 								<h2 class="major"><a href="https://home.benhota.xyz">Home Assistant</a></h2>
-								<span class="image main"><a href="https://home.benhota.xyz"><img src="images/home_assistant.png" alt="" /></a></span>
-								<p>Click on the image or header to go to home assistant.</p>
+								<span class="image main"><a href="https://home.benhota.xyz"><img src="images/home_assistant.png" alt="Home Assistant Dashboard" /></a></span>
+								<div class="service-card">
+									<p><span class="status-dot checking" id="ha-status-dot"></span> <strong id="ha-status-text">Checking...</strong></p>
+									<p class="response-time" id="ha-response-time"></p>
+									<ul class="feature-list">
+										<li>Smart lighting &amp; climate control</li>
+										<li>Device automation &amp; scenes</li>
+										<li>Energy monitoring dashboard</li>
+										<li>Security camera feeds</li>
+									</ul>
+								</div>
+								<div class="quick-actions">
+									<a href="https://home.benhota.xyz">Open Dashboard</a>
+									<a href="https://home.benhota.xyz/config">Settings</a>
+								</div>
 							</article>
 
-						<!-- Work -->
+						<!-- 3D Printer -->
 							<article id="3D_Printer">
 								<h2 class="major"><a href="https://ender_3_v2_neo.octoeverywhere.com">3D Printer</a></h2>
-								<span class="image main"><a href="https://ender_3_v2_neo.octoeverywhere.com"><img src="images/logo-mainsail.png" alt="" /></a></span>
-								<p>Click on the image or header to go to 3D Printer.</p>
+								<span class="image main"><a href="https://ender_3_v2_neo.octoeverywhere.com"><img src="images/logo-mainsail.png" alt="Mainsail 3D Printer Interface" /></a></span>
+								<div class="service-card">
+									<p><span class="status-dot checking" id="printer-status-dot"></span> <strong id="printer-status-text">Checking...</strong></p>
+									<p class="response-time" id="printer-response-time"></p>
+									<ul class="feature-list">
+										<li>Remote print monitoring via OctoEverywhere</li>
+										<li>Mainsail web interface</li>
+										<li>Live webcam feed</li>
+										<li>G-code file management</li>
+									</ul>
+								</div>
+								<div class="quick-actions">
+									<a href="https://ender_3_v2_neo.octoeverywhere.com">Open Mainsail</a>
+								</div>
+							</article>
+
+						<!-- Network -->
+							<article id="network">
+								<h2 class="major">Network</h2>
+								<div class="service-card">
+									<p><strong>Service Health</strong></p>
+									<ul class="feature-list">
+										<li><span class="status-dot checking" id="overview-ha-dot"></span> home.benhota.xyz — <span id="overview-ha-label">Checking...</span></li>
+										<li><span class="status-dot checking" id="overview-printer-dot"></span> OctoEverywhere — <span id="overview-printer-label">Checking...</span></li>
+									</ul>
+									<p style="font-size:0.7em; opacity:0.35; margin-bottom:0;">Health checks run on page load. <a href="#" id="recheck-btn" style="opacity:0.6;">Re-check now</a></p>
+								</div>
+								<div class="service-card">
+									<p><strong>Quick Links</strong></p>
+									<div class="quick-actions">
+										<a href="https://home.benhota.xyz" target="_blank">Home Assistant</a>
+										<a href="https://ender_3_v2_neo.octoeverywhere.com" target="_blank">3D Printer</a>
+									</div>
+								</div>
+								<div class="service-card">
+									<p><strong>Session</strong></p>
+									<p style="font-size:0.85em; opacity:0.6; margin-bottom:0;">You've been here for <span id="session-timer">0s</span></p>
+								</div>
+							</article>
+
+						<!-- Notes -->
+							<article id="notes">
+								<h2 class="major">Notes</h2>
+								<div class="service-card">
+									<p><strong>Quick Notepad</strong></p>
+									<p style="font-size:0.78em; opacity:0.45; margin-bottom:0.8rem;">Saved automatically in your browser.</p>
+									<div class="notepad">
+										<textarea id="notepad-input" placeholder="Type your notes here..."></textarea>
+										<p class="save-status" id="notepad-save-status">Ready</p>
+									</div>
+								</div>
 							</article>
 
 						<!-- About -->
 							<article id="about">
 								<h2 class="major">About</h2>
-								<span class="image main"><img src="images/pic03.jpg" alt="" /></span>
-								<p>Ben Hota Custom Domain Site.</p>
+								<span class="image main"><img src="images/pic03.jpg" alt="About" /></span>
+								<p>A personal home dashboard for the Hota family — bringing all self-hosted services under one roof.</p>
+								<div class="tech-grid">
+									<div class="tech-item">
+										<span class="tech-icon">🏠</span>
+										Home Assistant
+									</div>
+									<div class="tech-item">
+										<span class="tech-icon">🖨️</span>
+										Ender 3 V2 Neo
+									</div>
+									<div class="tech-item">
+										<span class="tech-icon">🌐</span>
+										Custom Domain
+									</div>
+									<div class="tech-item">
+										<span class="tech-icon">⚡</span>
+										HTML5 UP
+									</div>
+								</div>
+								<p style="margin-top:1.5em; font-size:0.75em; opacity:0.4;">Built with the Dimension template · Hosted on GitHub Pages</p>
 							</article>
 					</div>
 
 				<!-- Footer -->
 					<footer id="footer">
 						<p><img src="images/benhota.png" alt="Logo Icon" style="width: 200px; height: 200px;" /></p>
+						<p class="site-stats">
+							<span id="footer-year"></span> &copy; Ben Hota &bull; Last visited: <span id="last-visit">Never</span>
+						</p>
 					</footer>
 
 			</div>
@@ -79,11 +415,155 @@
 			<script src="assets/js/util.js"></script>
 			<script src="assets/js/main.js"></script>
 			<script>
-				// Get today's date
-				const today = new Date();
-				const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
-				document.getElementById('date').textContent = today.toLocaleDateString('he-IL', options);
+				// ── Date Display (updates once per minute) ──
+				function updateDate() {
+					var now = new Date();
+					var en = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+					var he = now.toLocaleDateString('he-IL', { year: 'numeric', month: 'numeric', day: 'numeric' });
+					var time = now.toLocaleTimeString('he-IL', { hour: '2-digit', minute: '2-digit' });
+					document.getElementById('date-display').textContent = time + '  ·  ' + en + '  ·  ' + he;
+				}
+				updateDate();
+				setInterval(updateDate, 30000);
+
+				// ── Dynamic Greeting ──
+				(function() {
+					var hour = new Date().getHours();
+					var g;
+					if (hour < 6)       g = 'Late night — the servers never sleep.';
+					else if (hour < 12)  g = 'Good morning! All systems looking good.';
+					else if (hour < 17)  g = 'Good afternoon — everything running smoothly.';
+					else if (hour < 21)  g = 'Good evening! Welcome back home.';
+					else                 g = 'Good night — quick check before bed?';
+					document.getElementById('greeting').textContent = g;
+				})();
+
+				// ── Typing Animation ──
+				(function() {
+					var text = 'Your home services \u2014 all in one place.';
+					var el = document.getElementById('subtitle');
+					var i = 0;
+					function type() {
+						if (i <= text.length) {
+							el.innerHTML = text.substring(0, i) + '<span class="typing-cursor">|</span>';
+							i++;
+							setTimeout(type, 45);
+						} else {
+							el.textContent = text;
+						}
+					}
+					setTimeout(type, 600);
+				})();
+
+				// ── Real Service Health Checks ──
+				function checkService(url, dotIds, textIds, responseTimeId) {
+					var dots = dotIds.map(function(id) { return document.getElementById(id); });
+					var texts = textIds.map(function(id) { return document.getElementById(id); });
+					var responseEl = responseTimeId ? document.getElementById(responseTimeId) : null;
+
+					dots.forEach(function(d) { if (d) d.className = 'status-dot checking'; });
+					texts.forEach(function(t) { if (t) t.textContent = 'Checking...'; });
+
+					var start = performance.now();
+					fetch(url, { mode: 'no-cors', cache: 'no-store' })
+						.then(function() {
+							var ms = Math.round(performance.now() - start);
+							dots.forEach(function(d) { if (d) d.className = 'status-dot online'; });
+							texts.forEach(function(t) { if (t) t.textContent = 'Reachable'; });
+							if (responseEl) responseEl.textContent = 'Response: ~' + ms + 'ms';
+						})
+						.catch(function() {
+							dots.forEach(function(d) { if (d) d.className = 'status-dot offline'; });
+							texts.forEach(function(t) { if (t) t.textContent = 'Unreachable'; });
+							if (responseEl) responseEl.textContent = 'Could not connect';
+						});
+				}
+
+				function runHealthChecks() {
+					checkService('https://home.benhota.xyz',
+						['ha-status-dot', 'overview-ha-dot'],
+						['ha-status-text', 'overview-ha-label'],
+						'ha-response-time');
+					checkService('https://ender_3_v2_neo.octoeverywhere.com',
+						['printer-status-dot', 'overview-printer-dot'],
+						['printer-status-text', 'overview-printer-label'],
+						'printer-response-time');
+				}
+				runHealthChecks();
+
+				document.getElementById('recheck-btn').addEventListener('click', function(e) {
+					e.preventDefault();
+					runHealthChecks();
+				});
+
+				// ── Keyboard Shortcuts ──
+				document.addEventListener('keydown', function(e) {
+					if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+					var map = { '1': '#Home_Assistant', '2': '#3D_Printer', '3': '#network', '4': '#notes', '5': '#about' };
+					if (map[e.key]) { e.preventDefault(); window.location.hash = map[e.key]; }
+				});
+
+				// ── Session Timer ──
+				(function() {
+					var start = Date.now();
+					setInterval(function() {
+						var s = Math.floor((Date.now() - start) / 1000);
+						var m = Math.floor(s / 60);
+						var sec = s % 60;
+						var el = document.getElementById('session-timer');
+						if (el) el.textContent = m > 0 ? m + 'm ' + sec + 's' : sec + 's';
+					}, 1000);
+				})();
+
+				// ── Last Visit ──
+				(function() {
+					var key = 'benhota_last_visit';
+					var last = localStorage.getItem(key);
+					var el = document.getElementById('last-visit');
+					if (last && el) {
+						var d = new Date(parseInt(last));
+						el.textContent = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+					}
+					localStorage.setItem(key, Date.now().toString());
+				})();
+
+				// ── Notepad ──
+				(function() {
+					var key = 'benhota_notepad';
+					var input = document.getElementById('notepad-input');
+					var status = document.getElementById('notepad-save-status');
+					var timeout;
+					var saved = localStorage.getItem(key);
+					if (saved) input.value = saved;
+					input.addEventListener('input', function() {
+						clearTimeout(timeout);
+						status.textContent = 'Typing...';
+						timeout = setTimeout(function() {
+							localStorage.setItem(key, input.value);
+							status.textContent = 'Saved \u2713';
+						}, 500);
+					});
+				})();
+
+				// ── Theme Toggle ──
+				(function() {
+					var btn = document.getElementById('theme-toggle');
+					var key = 'benhota_theme';
+					if (localStorage.getItem(key) === 'light') {
+						document.body.classList.add('light-mode');
+						btn.textContent = '\u2600\uFE0F';
+					}
+					btn.addEventListener('click', function() {
+						document.body.classList.toggle('light-mode');
+						var isLight = document.body.classList.contains('light-mode');
+						btn.textContent = isLight ? '\u2600\uFE0F' : '\uD83C\uDF19';
+						localStorage.setItem(key, isLight ? 'light' : 'dark');
+					});
+				})();
+
+				// ── Footer Year ──
+				document.getElementById('footer-year').textContent = new Date().getFullYear();
 			</script>
-			
+
 	</body>
 </html>
