@@ -2523,7 +2523,8 @@
 					cdn + 'build/three.min.js',
 					cdn + 'examples/js/controls/OrbitControls.js',
 					cdn + 'examples/js/loaders/GLTFLoader.js',
-					cdn + 'examples/js/loaders/DRACOLoader.js',
+					// DRACOLoader was removed from examples/js/ in 0.160.0; use 0.140.0 (API-compatible)
+					'https://cdn.jsdelivr.net/npm/three@0.140.0/examples/js/loaders/DRACOLoader.js',
 					cdn + 'examples/js/loaders/OBJLoader.js',
 					cdn + 'examples/js/loaders/MTLLoader.js'
 				];
@@ -2661,19 +2662,57 @@
 						// Load real encrypted GLB model (with Draco support)
 						setLoadText('Loading GLB model...');
 						var dracoLoader = new THREE.DRACOLoader();
-						dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.6/');
+						dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.7/');
 						dracoLoader.setDecoderConfig({ type: 'js' });
+						dracoLoader.preload();
 						var loader = new THREE.GLTFLoader();
 						loader.setDRACOLoader(dracoLoader);
 						loader.parse(modelResult.data, '', function(gltf) {
+							setLoadText('Model loaded, rendering...');
 							gltf.scene.traverse(function(child) {
 								if (child.isMesh) {
 									child.castShadow = true;
 									child.receiveShadow = true;
 								}
 							});
+
+							// Auto-center and scale to fit view
+							var box = new THREE.Box3().setFromObject(gltf.scene);
+							var center = box.getCenter(new THREE.Vector3());
+							var size = box.getSize(new THREE.Vector3());
+							var maxDim = Math.max(size.x, size.y, size.z);
+							if (maxDim > 0) {
+								var scale = 12 / maxDim;
+								gltf.scene.scale.setScalar(scale);
+								box.setFromObject(gltf.scene);
+								center = box.getCenter(new THREE.Vector3());
+								gltf.scene.position.x -= center.x;
+								gltf.scene.position.z -= center.z;
+								var newBox = new THREE.Box3().setFromObject(gltf.scene);
+								gltf.scene.position.y -= newBox.min.y;
+							}
+
 							scene.add(gltf.scene);
+
+							// Adjust camera to frame the model
+							var finalBox = new THREE.Box3().setFromObject(gltf.scene);
+							var fCenter = finalBox.getCenter(new THREE.Vector3());
+							var fSize = finalBox.getSize(new THREE.Vector3());
+							var maxS = Math.max(fSize.x, fSize.y, fSize.z);
+							camera.position.set(fCenter.x + maxS, fCenter.y + maxS * 0.6, fCenter.z + maxS);
+							controls.target.copy(fCenter);
+							controls.update();
+
 							finishScene();
+						}, function(err) {
+							setLoadText('Error loading model: ' + (err.message || err));
+							console.error('GLB parse error:', err);
+							// Fallback to demo house
+							setTimeout(function() {
+								setLoadText('Showing demo house instead...');
+								buildDemoHouse(scene);
+								finishScene();
+							}, 2000);
 						});
 					} else {
 						// Procedural demo house
