@@ -1042,6 +1042,121 @@
 		   ══════════════════════════════════════ */
 		.tile-icon.weather { background: rgba(6, 182, 212, 0.12); }
 		.tile-icon.todo { background: rgba(34, 197, 94, 0.12); }
+		.tile-icon.house3d { background: rgba(251, 146, 60, 0.12); }
+
+		/* ══════════════════════════════════════
+		   3D HOUSE VIEWER
+		   ══════════════════════════════════════ */
+		.house3d-gate {
+			text-align: center;
+			padding: 2rem 0;
+		}
+		.house3d-gate .gate-icon {
+			font-size: 3rem;
+			margin-bottom: 0.75rem;
+		}
+		.house3d-gate .gate-title {
+			font-size: 1rem;
+			font-weight: 600;
+			margin-bottom: 0.3rem;
+			color: var(--text-primary);
+		}
+		.house3d-gate .gate-sub {
+			font-size: 0.78rem;
+			color: var(--text-muted);
+			margin-bottom: 1.25rem;
+			line-height: 1.5;
+		}
+		.house3d-pw-row {
+			display: flex;
+			gap: 0.5rem;
+			max-width: 320px;
+			margin: 0 auto;
+		}
+		.house3d-pw-row input {
+			flex: 1;
+			height: 2.6rem;
+			background: var(--bg-card);
+			border: 1px solid var(--border);
+			border-radius: var(--radius-xs);
+			color: var(--text-primary);
+			font-family: var(--mono);
+			font-size: 0.85rem;
+			padding: 0 0.75rem;
+			outline: none;
+			transition: var(--transition);
+		}
+		.house3d-pw-row input:focus {
+			border-color: var(--accent);
+			box-shadow: 0 0 0 3px var(--accent-glow);
+		}
+		.house3d-pw-row button {
+			height: 2.6rem;
+			padding: 0 1.2rem;
+			background: linear-gradient(135deg, #f97316, #fb923c);
+			border: none;
+			border-radius: var(--radius-xs);
+			color: #fff;
+			font-family: var(--font);
+			font-size: 0.82rem;
+			font-weight: 600;
+			cursor: pointer;
+			transition: var(--transition);
+		}
+		.house3d-pw-row button:hover {
+			box-shadow: 0 4px 16px rgba(249,115,22,0.35);
+			transform: translateY(-1px);
+		}
+		.house3d-error {
+			font-size: 0.75rem;
+			color: var(--red);
+			margin-top: 0.6rem;
+			min-height: 1.2em;
+		}
+
+		#house3d-viewer {
+			width: 100%;
+			aspect-ratio: 16 / 10;
+			border-radius: var(--radius-sm);
+			overflow: hidden;
+			background: #0d0d14;
+			border: 1px solid var(--border);
+			position: relative;
+		}
+		#house3d-viewer canvas {
+			display: block;
+			width: 100% !important;
+			height: 100% !important;
+		}
+		.house3d-loading {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			padding: 2rem 0;
+			gap: 0.75rem;
+		}
+		.house3d-loading .spinner {
+			width: 32px; height: 32px;
+			border: 3px solid var(--border);
+			border-top-color: var(--accent);
+			border-radius: 50%;
+			animation: spin 0.8s linear infinite;
+		}
+		@keyframes spin { to { transform: rotate(360deg); } }
+		.house3d-loading .load-text {
+			font-size: 0.78rem;
+			color: var(--text-muted);
+			font-family: var(--mono);
+		}
+
+		.house3d-controls {
+			font-size: 0.68rem;
+			color: var(--text-muted);
+			text-align: center;
+			margin-top: 0.5rem;
+			font-family: var(--mono);
+		}
 
 		.weather-info {
 			display: flex;
@@ -1274,6 +1389,7 @@
 			<button class="nav-btn" data-panel="network"><span class="nav-icon">🌐</span> Network</button>
 			<button class="nav-btn" data-panel="notes"><span class="nav-icon">📝</span> Notes</button>
 			<button class="nav-btn" data-panel="todos"><span class="nav-icon">✅</span> Todos</button>
+			<button class="nav-btn" data-panel="house3d"><span class="nav-icon">🏡</span> 3D House</button>
 			<a class="nav-btn" href="/projects/"><span class="nav-icon">📂</span> Projects</a>
 			<button class="nav-btn" data-panel="about"><span class="nav-icon">ℹ️</span> About</button>
 		</nav>
@@ -1369,6 +1485,18 @@
 						<div class="tile-info">
 							<h3>Todos</h3>
 							<p id="tile-todo-count">0 tasks</p>
+						</div>
+					</div>
+					<span class="tile-arrow">&rarr;</span>
+				</div>
+
+				<!-- 3D House -->
+				<div class="dash-tile" data-panel="house3d">
+					<div class="tile-header">
+						<div class="tile-icon house3d">🏡</div>
+						<div class="tile-info">
+							<h3>3D House</h3>
+							<p>🔒 Protected</p>
 						</div>
 					</div>
 					<span class="tile-arrow">&rarr;</span>
@@ -1560,6 +1688,38 @@
 				</div>
 				<ul class="todo-list" id="todo-list"></ul>
 				<p class="todo-empty" id="todo-empty">No tasks yet — add one above!</p>
+			</div>
+		</div>
+	</div>
+
+	<!-- 3D House Panel -->
+	<div class="modal-overlay" id="panel-house3d">
+		<div class="modal-panel" style="max-width:720px;">
+			<button class="modal-close" onclick="closePanel()">&times;</button>
+			<h2 class="modal-title">🏡 3D House Model</h2>
+
+			<!-- Password gate -->
+			<div class="dash-card" id="house3d-gate">
+				<div class="house3d-gate">
+					<div class="gate-icon">🔐</div>
+					<div class="gate-title">Encrypted Content</div>
+					<div class="gate-sub">This 3D model is AES-256 encrypted. Your password decrypts the file directly — no secrets are stored in the source code.</div>
+					<div class="house3d-pw-row">
+						<input type="password" id="house3d-password" placeholder="Password" autocomplete="off" />
+						<button id="house3d-unlock-btn">Unlock</button>
+					</div>
+					<div class="house3d-error" id="house3d-error"></div>
+				</div>
+			</div>
+
+			<!-- 3D viewer (hidden until unlocked) -->
+			<div id="house3d-content" style="display:none;">
+				<div class="house3d-loading" id="house3d-loading">
+					<div class="spinner"></div>
+					<span class="load-text" id="house3d-load-text">Loading 3D engine...</span>
+				</div>
+				<div id="house3d-viewer"></div>
+				<p class="house3d-controls" id="house3d-controls-text" style="display:none;">🖱 Drag to orbit · Scroll to zoom · Right-click to pan</p>
 			</div>
 		</div>
 	</div>
@@ -1852,7 +2012,7 @@
 		// ── Keyboard Shortcuts ──
 		document.addEventListener('keydown', function(e) {
 			if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
-			var map = { '1': 'Home_Assistant', '2': '3D_Printer', '3': 'network', '4': 'notes', '5': 'todos', '6': 'weather', '7': 'about' };
+			var map = { '1': 'Home_Assistant', '2': '3D_Printer', '3': 'network', '4': 'notes', '5': 'todos', '6': 'weather', '7': 'house3d', '8': 'about' };
 			if (map[e.key]) { e.preventDefault(); openPanel(map[e.key]); }
 		});
 
@@ -1939,6 +2099,7 @@
 				{ icon: '📝', label: 'Notes', action: function() { openPanel('notes'); }, key: '4' },
 				{ icon: '✅', label: 'Todo List', action: function() { openPanel('todos'); }, key: '5' },
 				{ icon: '🌤️', label: 'Weather', action: function() { openPanel('weather'); }, key: '6' },
+				{ icon: '🏡', label: '3D House', action: function() { openPanel('house3d'); }, key: '7' },
 				{ icon: '📂', label: 'Projects', action: function() { window.location.href = '/projects/'; } },
 				{ icon: 'ℹ️', label: 'About', action: function() { openPanel('about'); } },
 				{ icon: '🔄', label: 'Re-check Services', action: function() { runHealthChecks(); } },
@@ -2223,6 +2384,507 @@
 			var quote = quotes[dayOfYear % quotes.length];
 			var el = document.getElementById('daily-quote');
 			if (el) el.textContent = quote;
+		})();
+
+		// ══════════════════════════════════════
+		// 3D HOUSE — AES-GCM encrypted model viewer
+		// ══════════════════════════════════════
+		(function() {
+			var gate = document.getElementById('house3d-gate');
+			var content = document.getElementById('house3d-content');
+			var pwInput = document.getElementById('house3d-password');
+			var unlockBtn = document.getElementById('house3d-unlock-btn');
+			var errorEl = document.getElementById('house3d-error');
+			var viewer = document.getElementById('house3d-viewer');
+			var unlocked = false;
+
+			// ── Crypto helpers (AES-256-GCM with PBKDF2) ──
+			var SALT_LEN = 16;
+			var IV_LEN = 12;
+			var ITERATIONS = 100000;
+
+			function deriveKey(password, salt) {
+				var enc = new TextEncoder();
+				return crypto.subtle.importKey('raw', enc.encode(password), 'PBKDF2', false, ['deriveKey'])
+					.then(function(baseKey) {
+						return crypto.subtle.deriveKey(
+							{ name: 'PBKDF2', salt: salt, iterations: ITERATIONS, hash: 'SHA-256' },
+							baseKey,
+							{ name: 'AES-GCM', length: 256 },
+							false,
+							['decrypt']
+						);
+					});
+			}
+
+			function decryptModel(encryptedBuf, password) {
+				var data = new Uint8Array(encryptedBuf);
+				var salt = data.slice(0, SALT_LEN);
+				var iv = data.slice(SALT_LEN, SALT_LEN + IV_LEN);
+				var ciphertext = data.slice(SALT_LEN + IV_LEN);
+
+				return deriveKey(password, salt).then(function(key) {
+					return crypto.subtle.decrypt({ name: 'AES-GCM', iv: iv }, key, ciphertext);
+				});
+			}
+
+			// ── Try loading & decrypting the model ──
+			function tryLoadModel(password) {
+				var encBuf;
+				return fetch('models/house.enc')
+					.catch(function(fetchErr) {
+						var e = new Error('fetch-error');
+						e.detail = fetchErr.message;
+						throw e;
+					})
+					.then(function(r) {
+						if (!r.ok) {
+							var e = new Error('no-file');
+							e.detail = 'HTTP ' + r.status;
+							throw e;
+						}
+						return r.arrayBuffer();
+					})
+					.then(function(buf) {
+						encBuf = buf;
+						return decryptModel(buf, password);
+					})
+					.catch(function(err) {
+						if (err.message === 'no-file' || err.message === 'fetch-error') throw err;
+						// Actual decryption error
+						var e = new Error('decrypt-failed');
+						e.detail = err.message;
+						e.fileSize = encBuf ? encBuf.byteLength : 0;
+						throw e;
+					})
+					.then(function(decrypted) {
+						return parseDecrypted(decrypted);
+					});
+			}
+
+			function doUnlock() {
+				var pw = pwInput.value;
+				if (!pw) { errorEl.textContent = 'Please enter a password.'; return; }
+				errorEl.textContent = '';
+				unlockBtn.textContent = 'Decrypting...';
+				unlockBtn.disabled = true;
+
+				tryLoadModel(pw)
+					.then(function(result) {
+						// Decryption succeeded — password is correct
+						gate.style.display = 'none';
+						content.style.display = 'block';
+						unlocked = true;
+						initThreeJS(result);
+					})
+					.catch(function(err) {
+						var resetBtn = function() {
+							unlockBtn.textContent = 'Unlock';
+							unlockBtn.disabled = false;
+						};
+
+						if (err.message === 'no-file') {
+							errorEl.textContent = 'Model file not found (models/house.enc). Upload the encrypted file first.';
+							resetBtn();
+						} else if (err.message === 'fetch-error') {
+							errorEl.textContent = 'Cannot load file: ' + (err.detail || 'network error') + '. If testing locally, use a local server (not file://).';
+							resetBtn();
+						} else if (err.message === 'decrypt-failed') {
+							errorEl.textContent = 'Wrong password — decryption failed.';
+							resetBtn();
+							pwInput.value = '';
+							pwInput.focus();
+						} else {
+							errorEl.textContent = 'Error: ' + err.message;
+							resetBtn();
+						}
+					});
+			}
+
+			unlockBtn.addEventListener('click', doUnlock);
+			pwInput.addEventListener('keydown', function(e) {
+				if (e.key === 'Enter') doUnlock();
+			});
+
+			// ── Three.js 3D scene ──
+			var threeLoaded = false;
+			var loadingEl = document.getElementById('house3d-loading');
+			var loadTextEl = document.getElementById('house3d-load-text');
+			var controlsTextEl = document.getElementById('house3d-controls-text');
+
+			function setLoadText(msg) {
+				if (loadTextEl) loadTextEl.textContent = msg;
+			}
+
+			function loadThreeJS(callback) {
+				if (threeLoaded) { callback(); return; }
+				var cdn = 'https://cdn.jsdelivr.net/npm/three@0.160.0/';
+				var scripts = [
+					cdn + 'build/three.min.js',
+					cdn + 'examples/js/controls/OrbitControls.js',
+					cdn + 'examples/js/loaders/GLTFLoader.js',
+					cdn + 'examples/js/loaders/DRACOLoader.js',
+					cdn + 'examples/js/loaders/OBJLoader.js',
+					cdn + 'examples/js/loaders/MTLLoader.js'
+				];
+				var idx = 0;
+				function next() {
+					if (idx >= scripts.length) { threeLoaded = true; callback(); return; }
+					var s = document.createElement('script');
+					s.src = scripts[idx++];
+					s.onload = next;
+					document.head.appendChild(s);
+				}
+				next();
+			}
+
+			// ── Parse decrypted data: detect bundle vs GLB ──
+			function parseDecrypted(buf) {
+				var data = new Uint8Array(buf);
+				// Check for BNDL magic (multi-file bundle)
+				if (data[0] === 0x42 && data[1] === 0x4E && data[2] === 0x44 && data[3] === 0x4C) {
+					var view = new DataView(buf);
+					var fileCount = view.getUint32(4, true);
+					var offset = 8;
+					var files = [];
+					for (var i = 0; i < fileCount; i++) {
+						var nameLen = view.getUint16(offset, true);
+						offset += 2;
+						var nameBytes = data.slice(offset, offset + nameLen);
+						var name = new TextDecoder().decode(nameBytes);
+						offset += nameLen;
+						var dataLen = view.getUint32(offset, true);
+						offset += 4;
+						var fileData = new Uint8Array(buf, offset, dataLen);
+						offset += dataLen;
+						files.push({ name: name, data: fileData });
+					}
+					return { type: 'bundle', files: files };
+				}
+				// Otherwise assume GLB / single file
+				return { type: 'glb', data: buf };
+			}
+
+			function initThreeJS(modelResult) {
+				setLoadText('Loading 3D engine...');
+				loadThreeJS(function() {
+					setLoadText('Building scene...');
+					var scene = new THREE.Scene();
+					scene.background = new THREE.Color(0x0d0d14);
+					scene.fog = new THREE.FogExp2(0x0d0d14, 0.02);
+
+					var w = viewer.clientWidth;
+					var h = viewer.clientHeight;
+					var camera = new THREE.PerspectiveCamera(50, w / h, 0.1, 1000);
+					camera.position.set(12, 8, 14);
+
+					var renderer = new THREE.WebGLRenderer({ antialias: true });
+					renderer.setSize(w, h);
+					renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+					renderer.shadowMap.enabled = true;
+					renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+					viewer.appendChild(renderer.domElement);
+
+					var controls = new THREE.OrbitControls(camera, renderer.domElement);
+					controls.enableDamping = true;
+					controls.dampingFactor = 0.05;
+					controls.target.set(0, 2, 0);
+					controls.update();
+
+					// Lights
+					var ambient = new THREE.AmbientLight(0x6366f1, 0.4);
+					scene.add(ambient);
+
+					var sun = new THREE.DirectionalLight(0xfff4e6, 1.2);
+					sun.position.set(10, 15, 8);
+					sun.castShadow = true;
+					sun.shadow.mapSize.width = 1024;
+					sun.shadow.mapSize.height = 1024;
+					sun.shadow.camera.near = 0.5;
+					sun.shadow.camera.far = 50;
+					sun.shadow.camera.left = -15;
+					sun.shadow.camera.right = 15;
+					sun.shadow.camera.top = 15;
+					sun.shadow.camera.bottom = -15;
+					scene.add(sun);
+
+					var fill = new THREE.DirectionalLight(0x8b5cf6, 0.3);
+					fill.position.set(-5, 4, -8);
+					scene.add(fill);
+
+					// Helper to finish setup after model loads
+					function finishScene() {
+						// Ground
+						var ground = new THREE.Mesh(
+							new THREE.PlaneGeometry(40, 40),
+							new THREE.MeshStandardMaterial({ color: 0x1a1a2e, roughness: 0.9 })
+						);
+						ground.rotation.x = -Math.PI / 2;
+						ground.receiveShadow = true;
+						scene.add(ground);
+
+						// Grid helper
+						var grid = new THREE.GridHelper(40, 40, 0x2a2a4a, 0x1a1a3a);
+						grid.position.y = 0.01;
+						scene.add(grid);
+
+						// Hide loading, show controls
+						if (loadingEl) loadingEl.style.display = 'none';
+						if (controlsTextEl) controlsTextEl.style.display = 'block';
+
+						// Animate
+						function animate() {
+							requestAnimationFrame(animate);
+							controls.update();
+							renderer.render(scene, camera);
+						}
+						animate();
+
+						// Resize observer
+						var ro = new ResizeObserver(function() {
+							var nw = viewer.clientWidth;
+							var nh = viewer.clientHeight;
+							camera.aspect = nw / nh;
+							camera.updateProjectionMatrix();
+							renderer.setSize(nw, nh);
+						});
+						ro.observe(viewer);
+					}
+
+					if (modelResult.type === 'bundle') {
+						// OBJ + MTL + textures bundle
+						setLoadText('Parsing model files...');
+						setTimeout(function() {
+							loadOBJBundle(scene, camera, controls, modelResult.files, finishScene);
+						}, 50);
+					} else if (modelResult.type === 'glb' && modelResult.data) {
+						// Load real encrypted GLB model (with Draco support)
+						setLoadText('Loading GLB model...');
+						var dracoLoader = new THREE.DRACOLoader();
+						dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.6/');
+						dracoLoader.setDecoderConfig({ type: 'js' });
+						var loader = new THREE.GLTFLoader();
+						loader.setDRACOLoader(dracoLoader);
+						loader.parse(modelResult.data, '', function(gltf) {
+							gltf.scene.traverse(function(child) {
+								if (child.isMesh) {
+									child.castShadow = true;
+									child.receiveShadow = true;
+								}
+							});
+							scene.add(gltf.scene);
+							finishScene();
+						});
+					} else {
+						// Procedural demo house
+						buildDemoHouse(scene);
+						finishScene();
+					}
+				});
+			}
+
+			// ── Load OBJ + MTL + textures from bundle ──
+			function loadOBJBundle(scene, camera, controls, files, done) {
+				var objFile = null, mtlFile = null;
+				var blobUrls = {};
+
+				files.forEach(function(f) {
+					var lower = f.name.toLowerCase();
+					if (lower.endsWith('.obj')) objFile = f;
+					else if (lower.endsWith('.mtl')) mtlFile = f;
+					else {
+						// Texture file — create blob URL
+						var mime = 'image/jpeg';
+						if (lower.endsWith('.png')) mime = 'image/png';
+						else if (lower.endsWith('.bmp')) mime = 'image/bmp';
+						else if (lower.endsWith('.tga')) mime = 'image/x-tga';
+						blobUrls[f.name] = URL.createObjectURL(new Blob([f.data], { type: mime }));
+					}
+				});
+
+				if (!objFile) {
+					setLoadText('Error: no .obj file in bundle');
+					return;
+				}
+
+				setLoadText('Decoding model (' + (objFile.data.byteLength / 1048576).toFixed(1) + ' MB)...');
+
+				// Use setTimeout to keep UI responsive for large files
+				setTimeout(function() {
+					var objText = new TextDecoder().decode(objFile.data);
+
+					function addObject(materials) {
+						setLoadText('Parsing OBJ geometry...');
+						setTimeout(function() {
+							var objLoader = new THREE.OBJLoader();
+							if (materials) objLoader.setMaterials(materials);
+							var object = objLoader.parse(objText);
+
+							object.traverse(function(child) {
+								if (child.isMesh) {
+									child.castShadow = true;
+									child.receiveShadow = true;
+								}
+							});
+
+							// Auto-center and scale to fit view
+							var box = new THREE.Box3().setFromObject(object);
+							var center = box.getCenter(new THREE.Vector3());
+							var size = box.getSize(new THREE.Vector3());
+							var maxDim = Math.max(size.x, size.y, size.z);
+							if (maxDim > 0) {
+								var scale = 12 / maxDim;
+								object.scale.setScalar(scale);
+								box.setFromObject(object);
+								center = box.getCenter(new THREE.Vector3());
+								object.position.x -= center.x;
+								object.position.z -= center.z;
+								// Place bottom on ground
+								var newBox = new THREE.Box3().setFromObject(object);
+								object.position.y -= newBox.min.y;
+							}
+
+							scene.add(object);
+
+							// Adjust camera to frame the object
+							var finalBox = new THREE.Box3().setFromObject(object);
+							var fCenter = finalBox.getCenter(new THREE.Vector3());
+							var fSize = finalBox.getSize(new THREE.Vector3());
+							var maxS = Math.max(fSize.x, fSize.y, fSize.z);
+							camera.position.set(fCenter.x + maxS, fCenter.y + maxS * 0.6, fCenter.z + maxS);
+							controls.target.copy(fCenter);
+							controls.update();
+
+							done();
+						}, 50);
+					}
+
+					if (mtlFile) {
+						setLoadText('Loading materials & textures...');
+						setTimeout(function() {
+							var mtlText = new TextDecoder().decode(mtlFile.data);
+
+							// Replace texture filenames with blob URLs
+							Object.keys(blobUrls).forEach(function(name) {
+								mtlText = mtlText.split(name).join(blobUrls[name]);
+							});
+
+							var mtlLoader = new THREE.MTLLoader();
+							var materials = mtlLoader.parse(mtlText, '');
+							materials.preload();
+							addObject(materials);
+						}, 50);
+					} else {
+						addObject(null);
+					}
+				}, 50);
+			}
+
+			// ── Procedural demo house ──
+			function buildDemoHouse(scene) {
+				var wallMat = new THREE.MeshStandardMaterial({ color: 0xe8dcc8, roughness: 0.7 });
+				var roofMat = new THREE.MeshStandardMaterial({ color: 0x8b4513, roughness: 0.6 });
+				var doorMat = new THREE.MeshStandardMaterial({ color: 0x5c3317, roughness: 0.5 });
+				var windowMat = new THREE.MeshStandardMaterial({ color: 0x87ceeb, roughness: 0.2, metalness: 0.3 });
+				var grassMat = new THREE.MeshStandardMaterial({ color: 0x2d5a27, roughness: 0.9 });
+
+				// Main body
+				var body = new THREE.Mesh(new THREE.BoxGeometry(6, 4, 5), wallMat);
+				body.position.set(0, 2, 0);
+				body.castShadow = true;
+				body.receiveShadow = true;
+				scene.add(body);
+
+				// Roof
+				var roofGeo = new THREE.ConeGeometry(4.8, 2.5, 4);
+				var roof = new THREE.Mesh(roofGeo, roofMat);
+				roof.position.set(0, 5.25, 0);
+				roof.rotation.y = Math.PI / 4;
+				roof.castShadow = true;
+				scene.add(roof);
+
+				// Door
+				var door = new THREE.Mesh(new THREE.BoxGeometry(1, 2.2, 0.1), doorMat);
+				door.position.set(0, 1.1, 2.55);
+				scene.add(door);
+
+				// Doorknob
+				var knob = new THREE.Mesh(new THREE.SphereGeometry(0.08), new THREE.MeshStandardMaterial({ color: 0xffd700, metalness: 0.8, roughness: 0.2 }));
+				knob.position.set(0.35, 1.1, 2.62);
+				scene.add(knob);
+
+				// Windows (front)
+				[-1.6, 1.6].forEach(function(x) {
+					var win = new THREE.Mesh(new THREE.BoxGeometry(0.8, 0.8, 0.1), windowMat);
+					win.position.set(x, 2.8, 2.55);
+					scene.add(win);
+					// Window frame
+					var frame = new THREE.Mesh(new THREE.BoxGeometry(0.9, 0.9, 0.05), doorMat);
+					frame.position.set(x, 2.8, 2.52);
+					scene.add(frame);
+				});
+
+				// Side windows
+				[-1.2, 1.2].forEach(function(z) {
+					var win = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.8, 0.8), windowMat);
+					win.position.set(3.05, 2.8, z);
+					scene.add(win);
+				});
+
+				// Chimney
+				var chimney = new THREE.Mesh(new THREE.BoxGeometry(0.8, 2.5, 0.8), new THREE.MeshStandardMaterial({ color: 0xb22222, roughness: 0.8 }));
+				chimney.position.set(-2, 5.5, -1);
+				chimney.castShadow = true;
+				scene.add(chimney);
+
+				// Front path
+				var path = new THREE.Mesh(new THREE.BoxGeometry(1.2, 0.05, 4), new THREE.MeshStandardMaterial({ color: 0x999999, roughness: 0.8 }));
+				path.position.set(0, 0.025, 4.5);
+				path.receiveShadow = true;
+				scene.add(path);
+
+				// Grass patches
+				[{x:-4, z:3}, {x:4, z:2}, {x:-3, z:-3}, {x:5, z:-2}, {x:-5, z:1}].forEach(function(p) {
+					var grass = new THREE.Mesh(new THREE.CylinderGeometry(0.6, 0.8, 0.15, 8), grassMat);
+					grass.position.set(p.x, 0.075, p.z);
+					scene.add(grass);
+				});
+
+				// Tree
+				var trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.3, 2, 6), doorMat);
+				trunk.position.set(-5, 1, 4);
+				trunk.castShadow = true;
+				scene.add(trunk);
+
+				var foliage = new THREE.Mesh(new THREE.SphereGeometry(1.5, 8, 6), new THREE.MeshStandardMaterial({ color: 0x228b22, roughness: 0.8 }));
+				foliage.position.set(-5, 3, 4);
+				foliage.castShadow = true;
+				scene.add(foliage);
+
+				// Fence
+				var fenceMat = new THREE.MeshStandardMaterial({ color: 0xdeb887, roughness: 0.7 });
+				for (var i = -6; i <= 6; i += 1.5) {
+					if (Math.abs(i) < 1) continue; // gap for path
+					var post = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.8, 0.1), fenceMat);
+					post.position.set(i, 0.4, 6.5);
+					scene.add(post);
+				}
+				// Fence rail
+				var rail1 = new THREE.Mesh(new THREE.BoxGeometry(5, 0.06, 0.06), fenceMat);
+				rail1.position.set(-3.75, 0.55, 6.5);
+				scene.add(rail1);
+				var rail2 = new THREE.Mesh(new THREE.BoxGeometry(5, 0.06, 0.06), fenceMat);
+				rail2.position.set(3.75, 0.55, 6.5);
+				scene.add(rail2);
+
+				// Porch light
+				var porch = new THREE.PointLight(0xffa500, 0.8, 6);
+				porch.position.set(0, 3.5, 3);
+				scene.add(porch);
+				var bulb = new THREE.Mesh(new THREE.SphereGeometry(0.1), new THREE.MeshBasicMaterial({ color: 0xffa500 }));
+				bulb.position.copy(porch.position);
+				scene.add(bulb);
+			}
 		})();
 	</script>
 </body>
