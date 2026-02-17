@@ -1,275 +1,444 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Projects — Ben Hota</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>Projects — Ben Hota</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com" />
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+	<style>
+		*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-        body {
-            font-family: "Source Sans Pro", sans-serif;
-            background: #1b1f22;
-            color: #fff;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 3rem 1.5rem;
-        }
+		:root {
+			--bg-primary: #0a0a0f;
+			--bg-secondary: #12121a;
+			--bg-card: rgba(255, 255, 255, 0.04);
+			--bg-card-hover: rgba(255, 255, 255, 0.07);
+			--bg-glass: rgba(255, 255, 255, 0.06);
+			--border: rgba(255, 255, 255, 0.08);
+			--border-hover: rgba(255, 255, 255, 0.15);
+			--text-primary: #e8e8ed;
+			--text-secondary: rgba(255, 255, 255, 0.55);
+			--text-muted: rgba(255, 255, 255, 0.3);
+			--accent: #6366f1;
+			--accent-glow: rgba(99, 102, 241, 0.3);
+			--accent2: #8b5cf6;
+			--radius: 16px;
+			--radius-sm: 10px;
+			--radius-xs: 6px;
+			--font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+			--mono: 'JetBrains Mono', 'Fira Code', monospace;
+			--transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+		}
 
-        h1 {
-            font-size: 1.8rem;
-            font-weight: 300;
-            letter-spacing: 0.3rem;
-            text-transform: uppercase;
-            margin-bottom: 0.5rem;
-        }
+		html { font-size: 16px; }
 
-        .back {
-            font-size: 0.8rem;
-            opacity: 0.5;
-            margin-bottom: 1rem;
-            text-decoration: none;
-            color: inherit;
-            border-bottom: 1px dotted rgba(255,255,255,0.3);
-        }
-        .back:hover { opacity: 0.8; }
+		body {
+			font-family: var(--font);
+			background: var(--bg-primary);
+			color: var(--text-primary);
+			min-height: 100vh;
+			overflow-x: hidden;
+			line-height: 1.6;
+			-webkit-font-smoothing: antialiased;
+			-moz-osx-font-smoothing: grayscale;
+		}
 
-        .status {
-            font-size: 0.75rem;
-            opacity: 0.35;
-            margin-bottom: 2rem;
-        }
+		/* ── Animated gradient background ── */
+		.bg-gradient {
+			position: fixed;
+			inset: 0;
+			z-index: 0;
+			overflow: hidden;
+			pointer-events: none;
+		}
+		.bg-gradient::before {
+			content: '';
+			position: absolute;
+			top: -50%;
+			left: -50%;
+			width: 200%;
+			height: 200%;
+			background: radial-gradient(ellipse at 20% 50%, rgba(99, 102, 241, 0.08) 0%, transparent 50%),
+						radial-gradient(ellipse at 80% 20%, rgba(139, 92, 246, 0.06) 0%, transparent 50%),
+						radial-gradient(ellipse at 50% 80%, rgba(6, 182, 212, 0.05) 0%, transparent 50%);
+			animation: bgShift 20s ease-in-out infinite;
+		}
+		@keyframes bgShift {
+			0%, 100% { transform: translate(0, 0) rotate(0deg); }
+			33% { transform: translate(2%, -1%) rotate(1deg); }
+			66% { transform: translate(-1%, 2%) rotate(-1deg); }
+		}
+		.bg-gradient::after {
+			content: '';
+			position: absolute;
+			inset: 0;
+			background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+			opacity: 0.4;
+		}
 
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 1.2rem;
-            width: 100%;
-            max-width: 900px;
-        }
+		/* ── Layout ── */
+		.page-wrapper {
+			position: relative;
+			z-index: 1;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			min-height: 100vh;
+			padding: 3rem 2rem;
+		}
 
-        .card {
-            border: 1px solid rgba(255,255,255,0.12);
-            border-radius: 6px;
-            padding: 1.5rem;
-            transition: border-color 0.2s, background 0.2s;
-            text-decoration: none;
-            color: inherit;
-            display: block;
-        }
-        .card:hover {
-            border-color: rgba(255,255,255,0.35);
-            background: rgba(255,255,255,0.03);
-        }
-        .card h2 {
-            font-size: 1rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            letter-spacing: 0.1rem;
-        }
-        .card p {
-            font-size: 0.85rem;
-            opacity: 0.6;
-            line-height: 1.5;
-        }
+		/* ── Header ── */
+		.page-header {
+			text-align: center;
+			margin-bottom: 2.5rem;
+			animation: fadeInUp 0.6s ease-out;
+		}
 
-        .tag {
-            display: inline-block;
-            font-size: 0.65rem;
-            opacity: 0.4;
-            border: 1px solid rgba(255,255,255,0.15);
-            border-radius: 3px;
-            padding: 0.15em 0.5em;
-            margin-top: 0.8rem;
-            margin-right: 0.3em;
-            text-transform: uppercase;
-            letter-spacing: 0.05rem;
-        }
+		@keyframes fadeInUp {
+			from { opacity: 0; transform: translateY(16px); }
+			to { opacity: 1; transform: translateY(0); }
+		}
 
-        .empty {
-            text-align: center;
-            opacity: 0.3;
-            font-size: 0.9rem;
-            padding: 3rem 0;
-        }
+		.page-header h1 {
+			font-size: 2rem;
+			font-weight: 700;
+			letter-spacing: -0.03em;
+			margin-bottom: 0.75rem;
+			background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.7) 100%);
+			-webkit-background-clip: text;
+			-webkit-text-fill-color: transparent;
+			background-clip: text;
+		}
 
-        .error {
-            text-align: center;
-            opacity: 0.5;
-            font-size: 0.85rem;
-            color: #f44336;
-            padding: 2rem 0;
-        }
+		.back-link {
+			display: inline-flex;
+			align-items: center;
+			gap: 0.4rem;
+			font-size: 0.82rem;
+			color: var(--text-secondary);
+			text-decoration: none;
+			border: 1px solid var(--border);
+			border-radius: 100px;
+			padding: 0.4rem 1rem;
+			transition: var(--transition);
+			backdrop-filter: blur(12px);
+			-webkit-backdrop-filter: blur(12px);
+			background: var(--bg-glass);
+			margin-bottom: 0.75rem;
+		}
+		.back-link:hover {
+			background: var(--bg-card-hover);
+			border-color: var(--border-hover);
+			color: var(--text-primary);
+			transform: translateX(-2px);
+		}
 
-        .loading {
-            opacity: 0.3;
-            font-size: 0.85rem;
-            padding: 2rem 0;
-            text-align: center;
-        }
-        .loading::after {
-            content: '';
-            animation: dots 1.5s steps(3) infinite;
-        }
-        @keyframes dots {
-            0%   { content: ''; }
-            33%  { content: '.'; }
-            66%  { content: '..'; }
-            100% { content: '...'; }
-        }
-    </style>
+		.project-count {
+			font-family: var(--mono);
+			font-size: 0.72rem;
+			color: var(--text-muted);
+			letter-spacing: 0.05em;
+		}
+
+		/* ── Grid ── */
+		.project-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+			gap: 1rem;
+			width: 100%;
+			max-width: 920px;
+			animation: fadeInUp 0.6s ease-out 0.15s both;
+		}
+
+		/* ── Card ── */
+		.project-card {
+			background: var(--bg-glass);
+			border: 1px solid var(--border);
+			border-radius: var(--radius);
+			padding: 1.5rem;
+			text-decoration: none;
+			color: inherit;
+			display: flex;
+			flex-direction: column;
+			gap: 0.5rem;
+			transition: var(--transition);
+			backdrop-filter: blur(12px);
+			-webkit-backdrop-filter: blur(12px);
+			position: relative;
+			overflow: hidden;
+		}
+		.project-card::before {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			height: 2px;
+			background: linear-gradient(90deg, var(--accent), var(--accent2));
+			opacity: 0;
+			transition: opacity var(--transition);
+		}
+		.project-card:hover {
+			border-color: var(--border-hover);
+			background: var(--bg-card-hover);
+			transform: translateY(-3px);
+			box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+		}
+		.project-card:hover::before {
+			opacity: 1;
+		}
+
+		.project-card h2 {
+			font-size: 1rem;
+			font-weight: 600;
+			letter-spacing: -0.01em;
+		}
+
+		.project-card p {
+			font-size: 0.82rem;
+			color: var(--text-secondary);
+			line-height: 1.5;
+		}
+
+		.project-card .card-arrow {
+			position: absolute;
+			right: 1.25rem;
+			top: 1.5rem;
+			color: var(--text-muted);
+			font-size: 0.85rem;
+			transition: var(--transition);
+		}
+		.project-card:hover .card-arrow {
+			color: var(--accent);
+			transform: translateX(3px);
+		}
+
+		/* ── Tags ── */
+		.tags {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 0.3rem;
+			margin-top: 0.3rem;
+		}
+		.tag {
+			font-family: var(--mono);
+			font-size: 0.6rem;
+			color: var(--accent);
+			border: 1px solid rgba(99, 102, 241, 0.2);
+			border-radius: 100px;
+			padding: 0.15em 0.6em;
+			letter-spacing: 0.03em;
+			text-transform: uppercase;
+		}
+
+		/* ── States ── */
+		.empty-state, .error-state, .loading-state {
+			text-align: center;
+			padding: 4rem 1rem;
+			grid-column: 1 / -1;
+		}
+
+		.empty-state {
+			color: var(--text-muted);
+			font-size: 0.9rem;
+		}
+		.empty-state .empty-icon {
+			font-size: 2.5rem;
+			margin-bottom: 1rem;
+			opacity: 0.5;
+		}
+
+		.error-state {
+			color: #ef4444;
+			font-size: 0.85rem;
+		}
+
+		.loading-state {
+			color: var(--text-muted);
+			font-size: 0.85rem;
+		}
+		.loading-state .spinner {
+			display: inline-block;
+			width: 20px;
+			height: 20px;
+			border: 2px solid var(--border);
+			border-top-color: var(--accent);
+			border-radius: 50%;
+			animation: spin 0.8s linear infinite;
+			margin-bottom: 0.75rem;
+		}
+		@keyframes spin { to { transform: rotate(360deg); } }
+
+		/* ── Responsive ── */
+		@media (max-width: 640px) {
+			.page-wrapper { padding: 2rem 1rem; }
+			.page-header h1 { font-size: 1.5rem; }
+			.project-grid { grid-template-columns: 1fr; gap: 0.75rem; }
+		}
+	</style>
 </head>
 <body>
-    <h1>Projects</h1>
-    <a class="back" href="/">← Back to Home</a>
-    <p class="status" id="status"></p>
-    <div class="grid" id="grid">
-        <p class="loading">Loading projects</p>
-    </div>
+	<div class="bg-gradient"></div>
 
-    <script>
-        var REPO = 'Trigger-4622/benhota_website';
-        var FOLDER = 'projects';
-        var API = 'https://api.github.com/repos/' + REPO + '/contents/' + FOLDER;
+	<div class="page-wrapper">
+		<div class="page-header">
+			<a class="back-link" href="/">&larr; Back to Home</a>
+			<h1>Projects</h1>
+			<p class="project-count" id="status"></p>
+		</div>
 
-        // Convert folder name to display name: "my-cool-app" → "My Cool App"
-        function formatName(name) {
-            return name
-                .replace(/[-_]/g, ' ')
-                .replace(/\b\w/g, function(c) { return c.toUpperCase(); });
-        }
+		<div class="project-grid" id="grid">
+			<div class="loading-state">
+				<div class="spinner"></div>
+				<p>Loading projects...</p>
+			</div>
+		</div>
+	</div>
 
-        // Try to fetch optional meta.json from a project folder
-        function fetchMeta(dirName) {
-            var url = API + '/' + dirName + '/meta.json';
-            return fetch(url)
-                .then(function(r) {
-                    if (!r.ok) throw new Error('no meta');
-                    return r.json();
-                })
-                .then(function(data) {
-                    // GitHub API returns content as base64
-                    var decoded = atob(data.content.replace(/\n/g, ''));
-                    return JSON.parse(decoded);
-                })
-                .catch(function() {
-                    return null; // No meta.json — that's fine
-                });
-        }
+	<script>
+		var REPO = 'Trigger-4622/benhota_website';
+		var FOLDER = 'projects';
+		var API = 'https://api.github.com/repos/' + REPO + '/contents/' + FOLDER;
 
-        // Build a card element
-        function createCard(href, name, description, tags) {
-            var a = document.createElement('a');
-            a.className = 'card';
-            a.href = href;
+		function formatName(name) {
+			return name
+				.replace(/[-_]/g, ' ')
+				.replace(/\b\w/g, function(c) { return c.toUpperCase(); });
+		}
 
-            var h2 = document.createElement('h2');
-            h2.textContent = name;
-            a.appendChild(h2);
+		function fetchMeta(dirName) {
+			var url = API + '/' + dirName + '/meta.json';
+			return fetch(url)
+				.then(function(r) {
+					if (!r.ok) throw new Error('no meta');
+					return r.json();
+				})
+				.then(function(data) {
+					var decoded = atob(data.content.replace(/\n/g, ''));
+					return JSON.parse(decoded);
+				})
+				.catch(function() {
+					return null;
+				});
+		}
 
-            if (description) {
-                var p = document.createElement('p');
-                p.textContent = description;
-                a.appendChild(p);
-            }
+		function createCard(href, name, description, tags) {
+			var a = document.createElement('a');
+			a.className = 'project-card';
+			a.href = href;
 
-            if (tags && tags.length) {
-                tags.forEach(function(tag) {
-                    var span = document.createElement('span');
-                    span.className = 'tag';
-                    span.textContent = tag;
-                    a.appendChild(span);
-                });
-            }
+			var h2 = document.createElement('h2');
+			h2.textContent = name;
+			a.appendChild(h2);
 
-            return a;
-        }
+			if (description) {
+				var p = document.createElement('p');
+				p.textContent = description;
+				a.appendChild(p);
+			}
 
-        // Main: fetch directory listing and build cards
-        fetch(API)
-            .then(function(r) {
-                if (!r.ok) throw new Error('GitHub API returned ' + r.status);
-                return r.json();
-            })
-            .then(function(items) {
-                // Separate folders and standalone HTML files (skip index.html)
-                var dirs = [];
-                var files = [];
+			if (tags && tags.length) {
+				var tagsDiv = document.createElement('div');
+				tagsDiv.className = 'tags';
+				tags.forEach(function(tag) {
+					var span = document.createElement('span');
+					span.className = 'tag';
+					span.textContent = tag;
+					tagsDiv.appendChild(span);
+				});
+				a.appendChild(tagsDiv);
+			}
 
-                items.forEach(function(item) {
-                    if (item.type === 'dir') {
-                        dirs.push(item.name);
-                    } else if (
-                        item.type === 'file' &&
-                        item.name.endsWith('.html') &&
-                        item.name !== 'index.html'
-                    ) {
-                        files.push(item.name);
-                    }
-                });
+			var arrow = document.createElement('span');
+			arrow.className = 'card-arrow';
+			arrow.innerHTML = '&rarr;';
+			a.appendChild(arrow);
 
-                if (dirs.length === 0 && files.length === 0) {
-                    document.getElementById('grid').innerHTML =
-                        '<p class="empty">No projects yet. Add a folder to /projects/ and push.</p>';
-                    document.getElementById('status').textContent = '0 projects';
-                    return;
-                }
+			return a;
+		}
 
-                // Fetch meta.json for each directory (in parallel)
-                var promises = dirs.map(function(dirName) {
-                    return fetchMeta(dirName).then(function(meta) {
-                        return {
-                            type: 'dir',
-                            folderName: dirName,
-                            name: (meta && meta.name) ? meta.name : formatName(dirName),
-                            description: (meta && meta.description) ? meta.description : null,
-                            tags: (meta && meta.tags) ? meta.tags : []
-                        };
-                    });
-                });
+		fetch(API)
+			.then(function(r) {
+				if (!r.ok) throw new Error('GitHub API returned ' + r.status);
+				return r.json();
+			})
+			.then(function(items) {
+				var dirs = [];
+				var files = [];
 
-                // Add standalone HTML files as projects too
-                files.forEach(function(fileName) {
-                    var baseName = fileName.replace('.html', '');
-                    promises.push(Promise.resolve({
-                        type: 'file',
-                        fileName: fileName,
-                        name: formatName(baseName),
-                        description: null,
-                        tags: ['HTML']
-                    }));
-                });
+				items.forEach(function(item) {
+					if (item.type === 'dir') {
+						dirs.push(item.name);
+					} else if (
+						item.type === 'file' &&
+						item.name.endsWith('.html') &&
+						item.name !== 'index.html'
+					) {
+						files.push(item.name);
+					}
+				});
 
-                return Promise.all(promises);
-            })
-            .then(function(projects) {
-                if (!projects) return;
+				if (dirs.length === 0 && files.length === 0) {
+					document.getElementById('grid').innerHTML =
+						'<div class="empty-state"><div class="empty-icon">📂</div><p>No projects yet.<br>Add a folder to /projects/ and push.</p></div>';
+					document.getElementById('status').textContent = '0 projects';
+					return;
+				}
 
-                // Sort alphabetically
-                projects.sort(function(a, b) {
-                    return a.name.localeCompare(b.name);
-                });
+				var promises = dirs.map(function(dirName) {
+					return fetchMeta(dirName).then(function(meta) {
+						return {
+							type: 'dir',
+							folderName: dirName,
+							name: (meta && meta.name) ? meta.name : formatName(dirName),
+							description: (meta && meta.description) ? meta.description : null,
+							tags: (meta && meta.tags) ? meta.tags : []
+						};
+					});
+				});
 
-                var grid = document.getElementById('grid');
-                grid.innerHTML = '';
+				files.forEach(function(fileName) {
+					var baseName = fileName.replace('.html', '');
+					promises.push(Promise.resolve({
+						type: 'file',
+						fileName: fileName,
+						name: formatName(baseName),
+						description: null,
+						tags: ['HTML']
+					}));
+				});
 
-                projects.forEach(function(proj) {
-                    var href = proj.type === 'dir'
-                        ? proj.folderName + '/'
-                        : proj.fileName;
-                    grid.appendChild(createCard(href, proj.name, proj.description, proj.tags));
-                });
+				return Promise.all(promises);
+			})
+			.then(function(projects) {
+				if (!projects) return;
 
-                var count = projects.length;
-                document.getElementById('status').textContent =
-                    count + ' project' + (count !== 1 ? 's' : '') + ' found';
-            })
-            .catch(function(err) {
-                document.getElementById('grid').innerHTML =
-                    '<p class="error">Failed to load projects: ' + err.message + '</p>';
-            });
-    </script>
+				projects.sort(function(a, b) {
+					return a.name.localeCompare(b.name);
+				});
+
+				var grid = document.getElementById('grid');
+				grid.innerHTML = '';
+
+				projects.forEach(function(proj, i) {
+					var href = proj.type === 'dir'
+						? proj.folderName + '/'
+						: proj.fileName;
+					var card = createCard(href, proj.name, proj.description, proj.tags);
+					card.style.animation = 'fadeInUp 0.5s ease-out ' + (i * 0.08) + 's both';
+					grid.appendChild(card);
+				});
+
+				var count = projects.length;
+				document.getElementById('status').textContent =
+					count + ' project' + (count !== 1 ? 's' : '') + ' found';
+			})
+			.catch(function(err) {
+				document.getElementById('grid').innerHTML =
+					'<div class="error-state"><p>Failed to load projects: ' + err.message + '</p></div>';
+			});
+	</script>
 </body>
 </html>

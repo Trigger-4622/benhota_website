@@ -1,570 +1,2044 @@
-<!DOCTYPE HTML>
-<!--
-	Dimension by HTML5 UP
-	html5up.net | @ajlkn
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
--->
-<html>
-	<head>
-		<title>Ben Hota Family Site</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="assets/css/main.css" />
-		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
-		<style>
-			/* ═══════════════════════════════════════
-			   OVERRIDES — work with the template
-			   ═══════════════════════════════════════ */
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+	<title>Ben Hota — Home Dashboard</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com" />
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+	<link rel="stylesheet" href="assets/css/fontawesome-all.min.css" />
+	<style>
+		/* ══════════════════════════════════════
+		   RESET & BASE
+		   ══════════════════════════════════════ */
+		*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-			/* ── Logo circle: just show a clean icon ── */
-			#header .logo {
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				font-size: 1.8rem;
-			}
+		:root {
+			--bg-primary: #0a0a0f;
+			--bg-secondary: #12121a;
+			--bg-card: rgba(255, 255, 255, 0.04);
+			--bg-card-hover: rgba(255, 255, 255, 0.07);
+			--bg-glass: rgba(255, 255, 255, 0.06);
+			--border: rgba(255, 255, 255, 0.08);
+			--border-hover: rgba(255, 255, 255, 0.15);
+			--text-primary: #e8e8ed;
+			--text-secondary: rgba(255, 255, 255, 0.55);
+			--text-muted: rgba(255, 255, 255, 0.3);
+			--accent: #6366f1;
+			--accent-glow: rgba(99, 102, 241, 0.3);
+			--accent2: #8b5cf6;
+			--accent3: #06b6d4;
+			--green: #22c55e;
+			--green-glow: rgba(34, 197, 94, 0.4);
+			--red: #ef4444;
+			--red-glow: rgba(239, 68, 68, 0.4);
+			--yellow: #eab308;
+			--radius: 16px;
+			--radius-sm: 10px;
+			--radius-xs: 6px;
+			--font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+			--mono: 'JetBrains Mono', 'Fira Code', monospace;
+			--transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+		}
 
-			/* ── Subtitle & greeting: undo uppercase for readability ── */
-			#header .content p.subtitle {
-				text-transform: none;
-				letter-spacing: 0.05rem;
-				font-size: 0.85rem;
-				line-height: 1.8;
-				margin-bottom: 0.6rem;
-			}
-			#header .content p.greeting {
-				text-transform: none;
-				letter-spacing: 0.04rem;
-				font-size: 0.75rem;
-				line-height: 1.6;
-				opacity: 0.5;
-				font-style: italic;
-				margin-bottom: 0;
-			}
-			#header .content p.date-display {
-				text-transform: none;
-				letter-spacing: 0.08rem;
-				font-size: 0.7rem;
-				opacity: 0.45;
-				margin-bottom: 0.5rem;
-			}
+		html { font-size: 16px; scroll-behavior: smooth; }
 
-			/* ── Typing cursor ── */
-			.typing-cursor {
-				animation: blink 1s step-end infinite;
-				font-weight: 100;
-			}
-			@keyframes blink { 50% { opacity: 0; } }
+		body {
+			font-family: var(--font);
+			background: var(--bg-primary);
+			color: var(--text-primary);
+			min-height: 100vh;
+			overflow-x: hidden;
+			line-height: 1.6;
+			-webkit-font-smoothing: antialiased;
+			-moz-osx-font-smoothing: grayscale;
+		}
 
-			/* ── Nav: shrink min-width so 4 items fit ── */
-			#header nav ul li a {
-				min-width: 5.5rem;
-				padding: 0 1rem 0 1.1rem;
-				font-size: 0.7rem;
-			}
+		/* ── Animated gradient background ── */
+		.bg-gradient {
+			position: fixed;
+			inset: 0;
+			z-index: 0;
+			overflow: hidden;
+			pointer-events: none;
+		}
+		.bg-gradient::before {
+			content: '';
+			position: absolute;
+			top: -50%;
+			left: -50%;
+			width: 200%;
+			height: 200%;
+			background: radial-gradient(ellipse at 20% 50%, rgba(99, 102, 241, 0.08) 0%, transparent 50%),
+						radial-gradient(ellipse at 80% 20%, rgba(139, 92, 246, 0.06) 0%, transparent 50%),
+						radial-gradient(ellipse at 50% 80%, rgba(6, 182, 212, 0.05) 0%, transparent 50%);
+			animation: bgShift 20s ease-in-out infinite;
+		}
+		@keyframes bgShift {
+			0%, 100% { transform: translate(0, 0) rotate(0deg); }
+			33% { transform: translate(2%, -1%) rotate(1deg); }
+			66% { transform: translate(-1%, 2%) rotate(-1deg); }
+		}
 
-			/* ═══════════════════════════════════════
-			   ARTICLE CONTENT STYLES
-			   ═══════════════════════════════════════ */
+		/* ── Noise texture overlay ── */
+		.bg-gradient::after {
+			content: '';
+			position: absolute;
+			inset: 0;
+			background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+			opacity: 0.4;
+		}
 
-			/* ── Service cards ── */
-			.service-card {
-				text-align: left;
-				padding: 1.2em;
-				border: 1px solid rgba(255,255,255,0.12);
-				border-radius: 6px;
-				margin-bottom: 1.2em;
-				transition: border-color 0.3s ease, background 0.3s ease;
-			}
-			.service-card:hover {
-				border-color: rgba(255,255,255,0.3);
-				background: rgba(255,255,255,0.025);
-			}
-			.service-card p {
-				margin-bottom: 0.5rem;
-			}
+		/* ══════════════════════════════════════
+		   LAYOUT
+		   ══════════════════════════════════════ */
+		.site-wrapper {
+			position: relative;
+			z-index: 1;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			min-height: 100vh;
+			padding: 2rem;
+		}
 
-			/* ── Status dots ── */
-			.status-dot {
-				display: inline-block;
-				width: 8px;
-				height: 8px;
-				border-radius: 50%;
-				margin-right: 8px;
-				vertical-align: middle;
-			}
-			.status-dot.checking {
-				background: #9e9e9e;
-				box-shadow: 0 0 4px #9e9e9e;
-				animation: pulse-dot 1s ease-in-out infinite;
-			}
-			.status-dot.online {
-				background: #4caf50;
-				box-shadow: 0 0 6px #4caf50;
-				animation: pulse-dot 2.5s ease-in-out infinite;
-			}
-			.status-dot.offline {
-				background: #f44336;
-				box-shadow: 0 0 6px #f44336;
-			}
-			@keyframes pulse-dot {
-				0%, 100% { opacity: 1; }
-				50% { opacity: 0.35; }
-			}
+		/* ══════════════════════════════════════
+		   HEADER
+		   ══════════════════════════════════════ */
+		.site-header {
+			text-align: center;
+			padding: 4rem 0 2rem;
+			max-width: 700px;
+			width: 100%;
+			animation: fadeInUp 0.8s ease-out;
+		}
 
-			/* ── Feature lists inside cards ── */
-			.feature-list {
-				list-style: none;
-				padding: 0;
-				margin: 0.6em 0 0.2em 0;
-			}
-			.feature-list li {
-				padding: 0.25em 0;
-				font-size: 0.85em;
-				opacity: 0.75;
-			}
-			.feature-list li::before {
-				content: "› ";
-				opacity: 0.4;
-			}
+		@keyframes fadeInUp {
+			from { opacity: 0; transform: translateY(20px); }
+			to { opacity: 1; transform: translateY(0); }
+		}
 
-			/* ── Response time label ── */
-			.response-time {
-				font-size: 0.7em;
-				opacity: 0.45;
-				margin-top: 0.15em;
-				margin-bottom: 0.4rem;
-			}
+		.logo-mark {
+			width: 72px;
+			height: 72px;
+			border-radius: 20px;
+			background: linear-gradient(135deg, var(--accent), var(--accent2));
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			margin: 0 auto 1.5rem;
+			font-size: 1.8rem;
+			box-shadow: 0 8px 32px var(--accent-glow);
+			position: relative;
+		}
+		.logo-mark::after {
+			content: '';
+			position: absolute;
+			inset: -2px;
+			border-radius: 22px;
+			background: linear-gradient(135deg, var(--accent), var(--accent2));
+			z-index: -1;
+			opacity: 0.3;
+			filter: blur(12px);
+		}
 
-			/* ── Quick action buttons ── */
-			.quick-actions {
-				display: flex;
-				gap: 0.6em;
-				margin-top: 0.8em;
-				flex-wrap: wrap;
-			}
-			.quick-actions a {
-				flex: 1;
-				min-width: 100px;
-				text-align: center;
-				padding: 0.5em 0.8em;
-				border: 1px solid rgba(255,255,255,0.2);
-				border-radius: 4px;
-				font-size: 0.8em;
-				transition: all 0.2s ease;
-				text-decoration: none;
-				border-bottom: 1px solid rgba(255,255,255,0.2);
-			}
-			.quick-actions a:hover {
-				background: rgba(255,255,255,0.075);
-				border-color: rgba(255,255,255,0.4);
-			}
+		.site-title {
+			font-size: 2.5rem;
+			font-weight: 700;
+			letter-spacing: -0.03em;
+			margin-bottom: 0.5rem;
+			background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.7) 100%);
+			-webkit-background-clip: text;
+			-webkit-text-fill-color: transparent;
+			background-clip: text;
+		}
 
-			/* ── Notepad ── */
-			.notepad textarea {
-				width: 100%;
-				min-height: 100px;
-				background: rgba(255,255,255,0.04);
-				border: 1px solid rgba(255,255,255,0.15);
-				border-radius: 4px;
-				color: inherit;
-				font-family: inherit;
-				font-size: 0.85em;
-				padding: 0.8em;
-				resize: vertical;
-				transition: border-color 0.2s ease;
-			}
-			.notepad textarea:focus {
-				outline: none;
-				border-color: rgba(255,255,255,0.4);
-				background: rgba(255,255,255,0.06);
-				box-shadow: 0 0 0 1px rgba(255,255,255,0.15);
-			}
-			.notepad .save-status {
-				font-size: 0.65em;
-				opacity: 0.35;
-				margin-top: 0.4em;
-				margin-bottom: 0;
-				text-align: right;
-			}
+		.site-date {
+			font-family: var(--mono);
+			font-size: 0.75rem;
+			color: var(--text-muted);
+			letter-spacing: 0.05em;
+			margin-bottom: 0.75rem;
+		}
 
-			/* ── Tech grid ── */
-			.tech-grid {
-				display: grid;
-				grid-template-columns: 1fr 1fr;
-				gap: 0.7em;
-				margin-top: 1em;
-			}
-			.tech-item {
-				border: 1px solid rgba(255,255,255,0.1);
-				border-radius: 4px;
-				padding: 0.7em;
-				text-align: center;
-				font-size: 0.8em;
-				transition: border-color 0.2s ease;
-			}
-			.tech-item:hover {
-				border-color: rgba(255,255,255,0.25);
-			}
-			.tech-item .tech-icon {
-				font-size: 1.5em;
-				display: block;
-				margin-bottom: 0.3em;
-			}
+		.site-subtitle {
+			font-size: 1rem;
+			color: var(--text-secondary);
+			font-weight: 400;
+			margin-bottom: 0.25rem;
+			min-height: 1.6em;
+		}
 
-			/* ── Theme toggle ── */
-			.theme-toggle {
-				position: fixed;
-				bottom: 1em;
-				right: 1em;
-				z-index: 1000;
-				background: rgba(255,255,255,0.08);
-				border: 1px solid rgba(255,255,255,0.15);
-				border-radius: 50%;
-				width: 38px;
-				height: 38px;
-				cursor: pointer;
-				font-size: 1em;
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				transition: all 0.2s ease;
-				backdrop-filter: blur(6px);
-			}
-			.theme-toggle:hover {
-				background: rgba(255,255,255,0.15);
-				transform: scale(1.08);
-			}
+		.typing-cursor {
+			animation: blink 1s step-end infinite;
+			color: var(--accent);
+			font-weight: 300;
+		}
+		@keyframes blink { 50% { opacity: 0; } }
 
-			/* ── Light mode ── */
-			body.light-mode #bg:after { filter: brightness(1.6) saturate(0.4); }
-			body.light-mode #wrapper { color: #1a1a2e; }
-			body.light-mode .service-card { border-color: rgba(0,0,0,0.1); }
-			body.light-mode .service-card:hover { border-color: rgba(0,0,0,0.2); background: rgba(0,0,0,0.02); }
-			body.light-mode .notepad textarea { background: rgba(0,0,0,0.04); border-color: rgba(0,0,0,0.12); color: #1a1a2e; }
-			body.light-mode .tech-item { border-color: rgba(0,0,0,0.1); }
-			body.light-mode .quick-actions a { border-color: rgba(0,0,0,0.12); }
-			body.light-mode .theme-toggle { background: rgba(0,0,0,0.06); border-color: rgba(0,0,0,0.15); }
+		.site-greeting {
+			font-size: 0.8rem;
+			color: var(--text-muted);
+			font-style: italic;
+		}
 
-			/* ── Footer stats ── */
-			footer#footer .site-stats {
-				letter-spacing: 0.15rem;
-				font-size: 0.6rem;
-				opacity: 0.4;
-				margin-top: 0.4em;
-				margin-bottom: 0;
-				text-transform: uppercase;
-			}
-		</style>
-	</head>
-	<body class="is-preload">
+		/* ══════════════════════════════════════
+		   NAVIGATION
+		   ══════════════════════════════════════ */
+		.main-nav {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: center;
+			gap: 0.5rem;
+			margin: 2rem auto;
+			max-width: 700px;
+			animation: fadeInUp 0.8s ease-out 0.15s both;
+		}
 
-		<!-- Theme Toggle -->
-		<button class="theme-toggle" id="theme-toggle" title="Toggle light/dark mode">🌙</button>
+		.nav-btn {
+			display: inline-flex;
+			align-items: center;
+			gap: 0.5rem;
+			padding: 0.6rem 1.2rem;
+			background: var(--bg-glass);
+			border: 1px solid var(--border);
+			border-radius: 100px;
+			color: var(--text-secondary);
+			font-family: var(--font);
+			font-size: 0.8rem;
+			font-weight: 500;
+			text-decoration: none;
+			cursor: pointer;
+			transition: var(--transition);
+			backdrop-filter: blur(12px);
+			-webkit-backdrop-filter: blur(12px);
+		}
+		.nav-btn:hover {
+			background: var(--bg-card-hover);
+			border-color: var(--border-hover);
+			color: var(--text-primary);
+			transform: translateY(-1px);
+			box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+		}
+		.nav-btn:active {
+			transform: translateY(0);
+		}
+		.nav-btn .nav-icon {
+			font-size: 1rem;
+		}
 
-		<!-- Wrapper -->
-			<div id="wrapper">
+		/* ══════════════════════════════════════
+		   MODAL / ARTICLE PANELS
+		   ══════════════════════════════════════ */
+		.modal-overlay {
+			display: none;
+			position: fixed;
+			inset: 0;
+			z-index: 100;
+			background: rgba(0, 0, 0, 0.6);
+			backdrop-filter: blur(8px);
+			-webkit-backdrop-filter: blur(8px);
+			align-items: center;
+			justify-content: center;
+			padding: 2rem;
+			opacity: 0;
+			transition: opacity 0.35s ease;
+		}
+		.modal-overlay.active {
+			display: flex;
+			opacity: 1;
+		}
 
-				<!-- Header -->
-					<header id="header">
-						<div class="logo">
-							<span>🏠</span>
-						</div>
-						<div class="content">
-							<div class="inner">
-								<h1>Ben Hota</h1>
-								<p class="date-display" id="date-display"></p>
-								<p class="subtitle" id="subtitle"></p>
-								<p class="greeting" id="greeting"></p>
-							</div>
-						</div>
-						<nav>
-							<ul>
-								<li><a href="#Home_Assistant">Home Assistant</a></li>
-								<li><a href="#3D_Printer">3D Printer</a></li>
-								<li><a href="#network">Network</a></li>
-								<li><a href="#notes">Notes</a></li>
-								<li><a href="/projects/">Projects</a></li>
-								<li><a href="#about">About</a></li>
-							</ul>
-						</nav>
-					</header>
+		.modal-panel {
+			background: var(--bg-secondary);
+			border: 1px solid var(--border);
+			border-radius: var(--radius);
+			max-width: 640px;
+			width: 100%;
+			max-height: 85vh;
+			overflow-y: auto;
+			padding: 2.5rem;
+			position: relative;
+			transform: translateY(12px) scale(0.98);
+			transition: transform 0.35s ease;
+			box-shadow: 0 24px 80px rgba(0, 0, 0, 0.5);
+		}
+		.modal-overlay.active .modal-panel {
+			transform: translateY(0) scale(1);
+		}
 
-				<!-- Main -->
-					<div id="main">
+		.modal-panel::-webkit-scrollbar { width: 6px; }
+		.modal-panel::-webkit-scrollbar-track { background: transparent; }
+		.modal-panel::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
 
-						<!-- Home Assistant -->
-							<article id="Home_Assistant">
-								<h2 class="major"><a href="https://home.benhota.xyz">Home Assistant</a></h2>
-								<span class="image main"><a href="https://home.benhota.xyz"><img src="images/home_assistant.png" alt="Home Assistant Dashboard" /></a></span>
-								<div class="service-card">
-									<p><span class="status-dot checking" id="ha-status-dot"></span> <strong id="ha-status-text">Checking...</strong></p>
-									<p class="response-time" id="ha-response-time"></p>
-									<ul class="feature-list">
-										<li>Smart lighting &amp; climate control</li>
-										<li>Device automation &amp; scenes</li>
-										<li>Energy monitoring dashboard</li>
-										<li>Security camera feeds</li>
-									</ul>
-								</div>
-								<div class="quick-actions">
-									<a href="https://home.benhota.xyz">Open Dashboard</a>
-									<a href="https://home.benhota.xyz/config">Settings</a>
-								</div>
-							</article>
+		.modal-close {
+			position: absolute;
+			top: 1rem;
+			right: 1rem;
+			width: 36px;
+			height: 36px;
+			border-radius: 10px;
+			border: 1px solid var(--border);
+			background: var(--bg-card);
+			color: var(--text-secondary);
+			cursor: pointer;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 1.2rem;
+			transition: var(--transition);
+			line-height: 1;
+		}
+		.modal-close:hover {
+			background: var(--bg-card-hover);
+			border-color: var(--border-hover);
+			color: var(--text-primary);
+		}
 
-						<!-- 3D Printer -->
-							<article id="3D_Printer">
-								<h2 class="major"><a href="https://ender_3_v2_neo.octoeverywhere.com">3D Printer</a></h2>
-								<span class="image main"><a href="https://ender_3_v2_neo.octoeverywhere.com"><img src="images/logo-mainsail.png" alt="Mainsail 3D Printer Interface" /></a></span>
-								<div class="service-card">
-									<p><span class="status-dot checking" id="printer-status-dot"></span> <strong id="printer-status-text">Checking...</strong></p>
-									<p class="response-time" id="printer-response-time"></p>
-									<ul class="feature-list">
-										<li>Remote print monitoring via OctoEverywhere</li>
-										<li>Mainsail web interface</li>
-										<li>Live webcam feed</li>
-										<li>G-code file management</li>
-									</ul>
-								</div>
-								<div class="quick-actions">
-									<a href="https://ender_3_v2_neo.octoeverywhere.com">Open Mainsail</a>
-								</div>
-							</article>
+		.modal-title {
+			font-size: 1.5rem;
+			font-weight: 700;
+			letter-spacing: -0.02em;
+			margin-bottom: 1.5rem;
+			padding-right: 2.5rem;
+		}
+		.modal-title a {
+			color: inherit;
+			text-decoration: none;
+			border-bottom: 2px solid var(--accent);
+			transition: var(--transition);
+		}
+		.modal-title a:hover {
+			color: var(--accent);
+		}
 
-						<!-- Network -->
-							<article id="network">
-								<h2 class="major">Network</h2>
-								<div class="service-card">
-									<p><strong>Service Health</strong></p>
-									<ul class="feature-list">
-										<li><span class="status-dot checking" id="overview-ha-dot"></span> home.benhota.xyz — <span id="overview-ha-label">Checking...</span></li>
-										<li><span class="status-dot checking" id="overview-printer-dot"></span> OctoEverywhere — <span id="overview-printer-label">Checking...</span></li>
-									</ul>
-									<p style="font-size:0.7em; opacity:0.35; margin-bottom:0;">Health checks run on page load. <a href="#" id="recheck-btn" style="opacity:0.6;">Re-check now</a></p>
-								</div>
-								<div class="service-card">
-									<p><strong>Quick Links</strong></p>
-									<div class="quick-actions">
-										<a href="https://home.benhota.xyz" target="_blank">Home Assistant</a>
-										<a href="https://ender_3_v2_neo.octoeverywhere.com" target="_blank">3D Printer</a>
-									</div>
-								</div>
-								<div class="service-card">
-									<p><strong>Session</strong></p>
-									<p style="font-size:0.85em; opacity:0.6; margin-bottom:0;">You've been here for <span id="session-timer">0s</span></p>
-								</div>
-							</article>
+		/* ══════════════════════════════════════
+		   CARDS (inside panels)
+		   ══════════════════════════════════════ */
+		.dash-card {
+			background: var(--bg-card);
+			border: 1px solid var(--border);
+			border-radius: var(--radius-sm);
+			padding: 1.25rem;
+			margin-bottom: 1rem;
+			transition: var(--transition);
+		}
+		.dash-card:hover {
+			border-color: var(--border-hover);
+			background: var(--bg-card-hover);
+		}
+		.dash-card:last-child { margin-bottom: 0; }
 
-						<!-- Notes -->
-							<article id="notes">
-								<h2 class="major">Notes</h2>
-								<div class="service-card">
-									<p><strong>Quick Notepad</strong></p>
-									<p style="font-size:0.78em; opacity:0.45; margin-bottom:0.8rem;">Saved automatically in your browser.</p>
-									<div class="notepad">
-										<textarea id="notepad-input" placeholder="Type your notes here..."></textarea>
-										<p class="save-status" id="notepad-save-status">Ready</p>
-									</div>
-								</div>
-							</article>
+		.dash-card-header {
+			display: flex;
+			align-items: center;
+			gap: 0.6rem;
+			margin-bottom: 0.5rem;
+		}
+		.dash-card-header strong {
+			font-weight: 600;
+			font-size: 0.9rem;
+		}
 
-						<!-- About -->
-							<article id="about">
-								<h2 class="major">About</h2>
-								<span class="image main"><img src="images/pic03.jpg" alt="About" /></span>
-								<p>A personal home dashboard for the Hota family — bringing all self-hosted services under one roof.</p>
-								<div class="tech-grid">
-									<div class="tech-item">
-										<span class="tech-icon">🏠</span>
-										Home Assistant
-									</div>
-									<div class="tech-item">
-										<span class="tech-icon">🖨️</span>
-										Ender 3 V2 Neo
-									</div>
-									<div class="tech-item">
-										<span class="tech-icon">🌐</span>
-										Custom Domain
-									</div>
-									<div class="tech-item">
-										<span class="tech-icon">⚡</span>
-										HTML5 UP
-									</div>
-								</div>
-								<p style="margin-top:1.5em; font-size:0.75em; opacity:0.4;">Built with the Dimension template · Hosted on GitHub Pages</p>
-							</article>
+		.dash-card p {
+			font-size: 0.85rem;
+			color: var(--text-secondary);
+			line-height: 1.6;
+			margin-bottom: 0.5rem;
+		}
+		.dash-card p:last-child { margin-bottom: 0; }
+
+		/* Status indicator */
+		.status-dot {
+			display: inline-block;
+			width: 8px;
+			height: 8px;
+			border-radius: 50%;
+			flex-shrink: 0;
+		}
+		.status-dot.checking {
+			background: #9e9e9e;
+			box-shadow: 0 0 6px rgba(158, 158, 158, 0.5);
+			animation: pulse-dot 1.2s ease-in-out infinite;
+		}
+		.status-dot.online {
+			background: var(--green);
+			box-shadow: 0 0 8px var(--green-glow);
+			animation: pulse-dot 2.5s ease-in-out infinite;
+		}
+		.status-dot.offline {
+			background: var(--red);
+			box-shadow: 0 0 8px var(--red-glow);
+		}
+		@keyframes pulse-dot {
+			0%, 100% { opacity: 1; }
+			50% { opacity: 0.4; }
+		}
+
+		.response-time {
+			font-family: var(--mono);
+			font-size: 0.7rem;
+			color: var(--text-muted);
+		}
+
+		/* Feature list */
+		.feature-list {
+			list-style: none;
+			margin: 0.8rem 0 0;
+		}
+		.feature-list li {
+			padding: 0.35rem 0;
+			font-size: 0.82rem;
+			color: var(--text-secondary);
+			display: flex;
+			align-items: center;
+			gap: 0.5rem;
+		}
+		.feature-list li::before {
+			content: '';
+			width: 4px;
+			height: 4px;
+			border-radius: 50%;
+			background: var(--accent);
+			flex-shrink: 0;
+			opacity: 0.6;
+		}
+
+		/* Action buttons */
+		.actions-row {
+			display: flex;
+			gap: 0.5rem;
+			margin-top: 1rem;
+			flex-wrap: wrap;
+		}
+		.action-btn {
+			flex: 1;
+			min-width: 100px;
+			text-align: center;
+			padding: 0.6rem 1rem;
+			background: var(--bg-glass);
+			border: 1px solid var(--border);
+			border-radius: var(--radius-xs);
+			color: var(--text-secondary);
+			font-family: var(--font);
+			font-size: 0.8rem;
+			font-weight: 500;
+			text-decoration: none;
+			cursor: pointer;
+			transition: var(--transition);
+		}
+		.action-btn:hover {
+			background: var(--bg-card-hover);
+			border-color: var(--accent);
+			color: var(--text-primary);
+		}
+		.action-btn.primary {
+			background: linear-gradient(135deg, var(--accent), var(--accent2));
+			border-color: transparent;
+			color: #fff;
+			font-weight: 600;
+		}
+		.action-btn.primary:hover {
+			box-shadow: 0 4px 20px var(--accent-glow);
+			transform: translateY(-1px);
+		}
+
+		/* Hero image in panel */
+		.panel-hero {
+			display: block;
+			width: 100%;
+			border-radius: var(--radius-sm);
+			margin-bottom: 1.5rem;
+			border: 1px solid var(--border);
+			overflow: hidden;
+		}
+		.panel-hero img {
+			width: 100%;
+			display: block;
+			transition: transform 0.5s ease;
+		}
+		.panel-hero:hover img {
+			transform: scale(1.03);
+		}
+
+		/* Notepad */
+		.notepad textarea {
+			width: 100%;
+			min-height: 120px;
+			background: var(--bg-card);
+			border: 1px solid var(--border);
+			border-radius: var(--radius-xs);
+			color: var(--text-primary);
+			font-family: var(--mono);
+			font-size: 0.82rem;
+			padding: 1rem;
+			resize: vertical;
+			transition: var(--transition);
+			line-height: 1.6;
+		}
+		.notepad textarea:focus {
+			outline: none;
+			border-color: var(--accent);
+			box-shadow: 0 0 0 3px var(--accent-glow);
+			background: rgba(255, 255, 255, 0.03);
+		}
+		.notepad .save-status {
+			font-family: var(--mono);
+			font-size: 0.65rem;
+			color: var(--text-muted);
+			margin-top: 0.5rem;
+			text-align: right;
+		}
+
+		/* Tech grid */
+		.tech-grid {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 0.6rem;
+			margin-top: 1rem;
+		}
+		.tech-item {
+			background: var(--bg-card);
+			border: 1px solid var(--border);
+			border-radius: var(--radius-xs);
+			padding: 1rem;
+			text-align: center;
+			font-size: 0.82rem;
+			color: var(--text-secondary);
+			transition: var(--transition);
+		}
+		.tech-item:hover {
+			border-color: var(--border-hover);
+			background: var(--bg-card-hover);
+		}
+		.tech-item .tech-icon {
+			font-size: 1.6rem;
+			display: block;
+			margin-bottom: 0.4rem;
+		}
+
+		/* ══════════════════════════════════════
+		   DASHBOARD TILES (home view)
+		   ══════════════════════════════════════ */
+		.dashboard {
+			display: grid;
+			grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+			gap: 1rem;
+			max-width: 900px;
+			width: 100%;
+			margin: 0 auto 2rem;
+			animation: fadeInUp 0.8s ease-out 0.3s both;
+		}
+
+		.dash-tile {
+			background: var(--bg-glass);
+			border: 1px solid var(--border);
+			border-radius: var(--radius);
+			padding: 1.5rem;
+			cursor: pointer;
+			transition: var(--transition);
+			backdrop-filter: blur(12px);
+			-webkit-backdrop-filter: blur(12px);
+			text-decoration: none;
+			color: inherit;
+			display: flex;
+			flex-direction: column;
+			gap: 0.75rem;
+			position: relative;
+			overflow: hidden;
+		}
+		.dash-tile::before {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			height: 2px;
+			background: linear-gradient(90deg, var(--accent), var(--accent2));
+			opacity: 0;
+			transition: opacity var(--transition);
+		}
+		.dash-tile:hover {
+			border-color: var(--border-hover);
+			background: var(--bg-card-hover);
+			transform: translateY(-3px);
+			box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+		}
+		.dash-tile:hover::before {
+			opacity: 1;
+		}
+
+		.tile-icon {
+			width: 44px;
+			height: 44px;
+			border-radius: 12px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 1.3rem;
+			flex-shrink: 0;
+		}
+		.tile-icon.ha { background: rgba(3, 169, 244, 0.12); }
+		.tile-icon.printer { background: rgba(255, 152, 0, 0.12); }
+		.tile-icon.network { background: rgba(76, 175, 80, 0.12); }
+		.tile-icon.notes { background: rgba(255, 235, 59, 0.12); }
+		.tile-icon.projects { background: rgba(156, 39, 176, 0.12); }
+		.tile-icon.about { background: rgba(99, 102, 241, 0.12); }
+
+		.tile-header {
+			display: flex;
+			align-items: center;
+			gap: 0.75rem;
+		}
+
+		.tile-info h3 {
+			font-size: 0.95rem;
+			font-weight: 600;
+			letter-spacing: -0.01em;
+			margin-bottom: 0.1rem;
+		}
+		.tile-info p {
+			font-size: 0.75rem;
+			color: var(--text-muted);
+			margin: 0;
+		}
+
+		.tile-status {
+			display: flex;
+			align-items: center;
+			gap: 0.4rem;
+			font-size: 0.75rem;
+			color: var(--text-secondary);
+			font-family: var(--mono);
+		}
+
+		.tile-arrow {
+			position: absolute;
+			right: 1.25rem;
+			top: 50%;
+			transform: translateY(-50%);
+			color: var(--text-muted);
+			font-size: 0.9rem;
+			transition: var(--transition);
+		}
+		.dash-tile:hover .tile-arrow {
+			color: var(--accent);
+			transform: translateY(-50%) translateX(3px);
+		}
+
+		/* ══════════════════════════════════════
+		   FOOTER
+		   ══════════════════════════════════════ */
+		.site-footer {
+			text-align: center;
+			padding: 2rem 0 3rem;
+			max-width: 700px;
+			width: 100%;
+			animation: fadeInUp 0.8s ease-out 0.45s both;
+		}
+
+		.footer-logo {
+			width: 80px;
+			height: 80px;
+			border-radius: 50%;
+			border: 2px solid var(--border);
+			margin: 0 auto 1rem;
+			display: block;
+			object-fit: cover;
+			opacity: 0.7;
+			transition: var(--transition);
+		}
+		.footer-logo:hover {
+			opacity: 1;
+			border-color: var(--accent);
+		}
+
+		.footer-text {
+			font-size: 0.7rem;
+			color: var(--text-muted);
+			font-family: var(--mono);
+			letter-spacing: 0.05em;
+		}
+
+		/* ══════════════════════════════════════
+		   THEME TOGGLE
+		   ══════════════════════════════════════ */
+		.theme-toggle {
+			position: fixed;
+			bottom: 1.5rem;
+			right: 1.5rem;
+			z-index: 200;
+			width: 44px;
+			height: 44px;
+			border-radius: 14px;
+			background: var(--bg-glass);
+			border: 1px solid var(--border);
+			color: var(--text-secondary);
+			cursor: pointer;
+			font-size: 1.1rem;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			transition: var(--transition);
+			backdrop-filter: blur(16px);
+			-webkit-backdrop-filter: blur(16px);
+			box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+		}
+		.theme-toggle:hover {
+			background: var(--bg-card-hover);
+			border-color: var(--border-hover);
+			transform: scale(1.08);
+		}
+
+		/* ── Light mode ── */
+		body.light-mode {
+			--bg-primary: #f5f5f7;
+			--bg-secondary: #ffffff;
+			--bg-card: rgba(0, 0, 0, 0.03);
+			--bg-card-hover: rgba(0, 0, 0, 0.06);
+			--bg-glass: rgba(255, 255, 255, 0.7);
+			--border: rgba(0, 0, 0, 0.08);
+			--border-hover: rgba(0, 0, 0, 0.15);
+			--text-primary: #1a1a2e;
+			--text-secondary: rgba(0, 0, 0, 0.55);
+			--text-muted: rgba(0, 0, 0, 0.3);
+		}
+		body.light-mode .site-title {
+			background: linear-gradient(135deg, #1a1a2e 0%, #333 100%);
+			-webkit-background-clip: text;
+			-webkit-text-fill-color: transparent;
+			background-clip: text;
+		}
+		body.light-mode .bg-gradient::before {
+			background: radial-gradient(ellipse at 20% 50%, rgba(99, 102, 241, 0.06) 0%, transparent 50%),
+						radial-gradient(ellipse at 80% 20%, rgba(139, 92, 246, 0.04) 0%, transparent 50%),
+						radial-gradient(ellipse at 50% 80%, rgba(6, 182, 212, 0.03) 0%, transparent 50%);
+		}
+		body.light-mode .logo-mark {
+			box-shadow: 0 8px 32px rgba(99, 102, 241, 0.2);
+		}
+		body.light-mode .modal-panel {
+			box-shadow: 0 24px 80px rgba(0, 0, 0, 0.15);
+		}
+
+		/* ══════════════════════════════════════
+		   KEYBOARD HINT
+		   ══════════════════════════════════════ */
+		.kbd-hint {
+			position: fixed;
+			bottom: 1.5rem;
+			left: 1.5rem;
+			font-family: var(--mono);
+			font-size: 0.6rem;
+			color: var(--text-muted);
+			z-index: 200;
+			display: flex;
+			gap: 0.5rem;
+			align-items: center;
+		}
+		.kbd {
+			display: inline-flex;
+			padding: 0.15em 0.5em;
+			border: 1px solid var(--border);
+			border-radius: 4px;
+			background: var(--bg-card);
+			font-size: 0.6rem;
+		}
+
+		/* ══════════════════════════════════════
+		   PARTICLE CANVAS
+		   ══════════════════════════════════════ */
+		#particle-canvas {
+			position: fixed;
+			inset: 0;
+			z-index: 0;
+			pointer-events: none;
+		}
+
+		/* ══════════════════════════════════════
+		   CURSOR GLOW
+		   ══════════════════════════════════════ */
+		.cursor-glow {
+			position: fixed;
+			width: 300px;
+			height: 300px;
+			border-radius: 50%;
+			pointer-events: none;
+			z-index: 0;
+			background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+			transform: translate(-50%, -50%);
+			opacity: 0;
+			transition: opacity 0.4s ease;
+			mix-blend-mode: screen;
+		}
+		.cursor-glow.active { opacity: 0.5; }
+		body.light-mode .cursor-glow { opacity: 0; display: none; }
+
+		/* ══════════════════════════════════════
+		   COMMAND PALETTE
+		   ══════════════════════════════════════ */
+		.cmd-overlay {
+			display: none;
+			position: fixed;
+			inset: 0;
+			z-index: 300;
+			background: rgba(0, 0, 0, 0.55);
+			backdrop-filter: blur(10px);
+			-webkit-backdrop-filter: blur(10px);
+			align-items: flex-start;
+			justify-content: center;
+			padding-top: 20vh;
+		}
+		.cmd-overlay.active { display: flex; }
+
+		.cmd-box {
+			width: 100%;
+			max-width: 480px;
+			background: var(--bg-secondary);
+			border: 1px solid var(--border-hover);
+			border-radius: var(--radius);
+			box-shadow: 0 24px 80px rgba(0,0,0,0.5);
+			overflow: hidden;
+			animation: cmdSlide 0.2s ease-out;
+		}
+		@keyframes cmdSlide {
+			from { opacity: 0; transform: translateY(-8px) scale(0.98); }
+			to { opacity: 1; transform: translateY(0) scale(1); }
+		}
+
+		.cmd-input-wrap {
+			display: flex;
+			align-items: center;
+			padding: 0 1rem;
+			border-bottom: 1px solid var(--border);
+		}
+		.cmd-input-wrap .cmd-icon {
+			font-size: 1rem;
+			color: var(--text-muted);
+			margin-right: 0.6rem;
+		}
+		.cmd-input {
+			flex: 1;
+			height: 3rem;
+			border: none;
+			background: transparent;
+			color: var(--text-primary);
+			font-family: var(--font);
+			font-size: 0.9rem;
+			outline: none;
+		}
+		.cmd-input::placeholder { color: var(--text-muted); }
+
+		.cmd-results {
+			max-height: 260px;
+			overflow-y: auto;
+			padding: 0.4rem;
+		}
+		.cmd-results::-webkit-scrollbar { width: 4px; }
+		.cmd-results::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+
+		.cmd-item {
+			display: flex;
+			align-items: center;
+			gap: 0.7rem;
+			padding: 0.6rem 0.8rem;
+			border-radius: var(--radius-xs);
+			cursor: pointer;
+			transition: background 0.15s ease;
+			color: var(--text-secondary);
+			font-size: 0.82rem;
+		}
+		.cmd-item:hover, .cmd-item.active {
+			background: var(--bg-card-hover);
+			color: var(--text-primary);
+		}
+		.cmd-item .cmd-item-icon { font-size: 1.1rem; width: 1.5rem; text-align: center; }
+		.cmd-item .cmd-item-label { flex: 1; }
+		.cmd-item .cmd-item-kbd {
+			font-family: var(--mono);
+			font-size: 0.6rem;
+			color: var(--text-muted);
+			padding: 0.15em 0.45em;
+			border: 1px solid var(--border);
+			border-radius: 3px;
+		}
+
+		/* ══════════════════════════════════════
+		   WEATHER WIDGET
+		   ══════════════════════════════════════ */
+		.tile-icon.weather { background: rgba(6, 182, 212, 0.12); }
+		.tile-icon.todo { background: rgba(34, 197, 94, 0.12); }
+
+		.weather-info {
+			display: flex;
+			align-items: center;
+			gap: 0.5rem;
+			font-family: var(--mono);
+			font-size: 0.75rem;
+			color: var(--text-secondary);
+		}
+		.weather-temp {
+			font-size: 1.2rem;
+			font-weight: 600;
+			color: var(--text-primary);
+		}
+
+		/* ══════════════════════════════════════
+		   TODO LIST
+		   ══════════════════════════════════════ */
+		.todo-input-row {
+			display: flex;
+			gap: 0.5rem;
+			margin-bottom: 0.75rem;
+		}
+		.todo-input {
+			flex: 1;
+			height: 2.4rem;
+			background: var(--bg-card);
+			border: 1px solid var(--border);
+			border-radius: var(--radius-xs);
+			color: var(--text-primary);
+			font-family: var(--font);
+			font-size: 0.82rem;
+			padding: 0 0.75rem;
+			outline: none;
+			transition: var(--transition);
+		}
+		.todo-input:focus {
+			border-color: var(--accent);
+			box-shadow: 0 0 0 3px var(--accent-glow);
+		}
+		.todo-add-btn {
+			height: 2.4rem;
+			padding: 0 1rem;
+			background: linear-gradient(135deg, var(--accent), var(--accent2));
+			border: none;
+			border-radius: var(--radius-xs);
+			color: #fff;
+			font-family: var(--font);
+			font-size: 0.8rem;
+			font-weight: 600;
+			cursor: pointer;
+			transition: var(--transition);
+		}
+		.todo-add-btn:hover {
+			box-shadow: 0 4px 16px var(--accent-glow);
+			transform: translateY(-1px);
+		}
+
+		.todo-list { list-style: none; }
+		.todo-item {
+			display: flex;
+			align-items: center;
+			gap: 0.6rem;
+			padding: 0.55rem 0.6rem;
+			border-radius: var(--radius-xs);
+			margin-bottom: 0.3rem;
+			transition: background 0.15s ease;
+			font-size: 0.82rem;
+		}
+		.todo-item:hover { background: var(--bg-card); }
+
+		.todo-check {
+			width: 18px;
+			height: 18px;
+			border-radius: 50%;
+			border: 2px solid var(--border-hover);
+			cursor: pointer;
+			flex-shrink: 0;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			transition: var(--transition);
+			background: transparent;
+			color: transparent;
+			font-size: 0.6rem;
+		}
+		.todo-check:hover { border-color: var(--accent); }
+		.todo-item.done .todo-check {
+			background: var(--green);
+			border-color: var(--green);
+			color: #fff;
+		}
+		.todo-item.done .todo-text {
+			text-decoration: line-through;
+			opacity: 0.4;
+		}
+
+		.todo-text { flex: 1; color: var(--text-secondary); }
+
+		.todo-delete {
+			width: 22px;
+			height: 22px;
+			border: none;
+			background: transparent;
+			color: var(--text-muted);
+			cursor: pointer;
+			border-radius: 4px;
+			font-size: 0.75rem;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			opacity: 0;
+			transition: var(--transition);
+		}
+		.todo-item:hover .todo-delete { opacity: 1; }
+		.todo-delete:hover { background: rgba(239, 68, 68, 0.15); color: var(--red); }
+
+		.todo-empty {
+			text-align: center;
+			color: var(--text-muted);
+			font-size: 0.8rem;
+			padding: 1.5rem 0;
+		}
+
+		/* ══════════════════════════════════════
+		   VISIT COUNTER & QUOTE
+		   ══════════════════════════════════════ */
+		.visit-badge {
+			display: inline-flex;
+			align-items: center;
+			gap: 0.4rem;
+			font-family: var(--mono);
+			font-size: 0.65rem;
+			color: var(--text-muted);
+			background: var(--bg-card);
+			border: 1px solid var(--border);
+			border-radius: 100px;
+			padding: 0.25rem 0.75rem;
+			margin-bottom: 0.75rem;
+		}
+		.visit-count {
+			color: var(--accent);
+			font-weight: 600;
+		}
+
+		.daily-quote {
+			font-size: 0.75rem;
+			color: var(--text-muted);
+			font-style: italic;
+			margin-top: 0.5rem;
+			max-width: 400px;
+			margin-left: auto;
+			margin-right: auto;
+			line-height: 1.5;
+		}
+
+		/* ══════════════════════════════════════
+		   RESPONSIVE
+		   ══════════════════════════════════════ */
+		@media (max-width: 640px) {
+			.site-header { padding: 2.5rem 0 1.5rem; }
+			.site-title { font-size: 1.75rem; }
+			.dashboard { grid-template-columns: 1fr; gap: 0.75rem; }
+			.modal-panel { padding: 1.75rem; border-radius: 12px; }
+			.modal-overlay { padding: 1rem; }
+			.kbd-hint { display: none; }
+			.site-wrapper { padding: 1rem; }
+			.tech-grid { grid-template-columns: 1fr; }
+			.main-nav { gap: 0.4rem; }
+			.nav-btn { padding: 0.5rem 0.9rem; font-size: 0.75rem; }
+			.cursor-glow { display: none; }
+			.cmd-box { max-width: calc(100% - 2rem); }
+		}
+	</style>
+</head>
+<body>
+	<!-- Animated Background -->
+	<div class="bg-gradient"></div>
+	<canvas id="particle-canvas"></canvas>
+	<div class="cursor-glow" id="cursor-glow"></div>
+
+	<!-- Theme Toggle -->
+	<button class="theme-toggle" id="theme-toggle" title="Toggle light/dark mode">🌙</button>
+
+	<!-- Keyboard Hint -->
+	<div class="kbd-hint">
+		<span class="kbd">1</span>-<span class="kbd">7</span> quick nav &bull;
+		<span class="kbd">Ctrl+K</span> search &bull;
+		<span class="kbd">Esc</span> close
+	</div>
+
+	<!-- Command Palette -->
+	<div class="cmd-overlay" id="cmd-overlay">
+		<div class="cmd-box">
+			<div class="cmd-input-wrap">
+				<span class="cmd-icon">🔍</span>
+				<input class="cmd-input" id="cmd-input" type="text" placeholder="Search or jump to..." autocomplete="off" />
+			</div>
+			<div class="cmd-results" id="cmd-results"></div>
+		</div>
+	</div>
+
+	<div class="site-wrapper">
+		<!-- Header -->
+		<header class="site-header">
+			<div class="logo-mark">🏠</div>
+			<h1 class="site-title">Ben Hota</h1>
+			<div class="visit-badge">👁️ Visit #<span class="visit-count" id="visit-count">1</span></div>
+			<p class="site-date" id="date-display"></p>
+			<p class="site-subtitle" id="subtitle"></p>
+			<p class="site-greeting" id="greeting"></p>
+			<p class="daily-quote" id="daily-quote"></p>
+		</header>
+
+		<!-- Navigation Pills -->
+		<nav class="main-nav">
+			<button class="nav-btn" data-panel="Home_Assistant"><span class="nav-icon">🏠</span> Home Assistant</button>
+			<button class="nav-btn" data-panel="3D_Printer"><span class="nav-icon">🖨️</span> 3D Printer</button>
+			<button class="nav-btn" data-panel="network"><span class="nav-icon">🌐</span> Network</button>
+			<button class="nav-btn" data-panel="notes"><span class="nav-icon">📝</span> Notes</button>
+			<button class="nav-btn" data-panel="todos"><span class="nav-icon">✅</span> Todos</button>
+			<a class="nav-btn" href="/projects/"><span class="nav-icon">📂</span> Projects</a>
+			<button class="nav-btn" data-panel="about"><span class="nav-icon">ℹ️</span> About</button>
+		</nav>
+
+		<!-- Dashboard Tiles -->
+		<section class="dashboard">
+			<!-- Home Assistant -->
+			<div class="dash-tile" data-panel="Home_Assistant">
+				<div class="tile-header">
+					<div class="tile-icon ha">🏠</div>
+					<div class="tile-info">
+						<h3>Home Assistant</h3>
+						<p>Smart home control center</p>
 					</div>
-
-				<!-- Footer -->
-					<footer id="footer">
-						<p><img src="images/benhota.png" alt="Logo Icon" style="width: 200px; height: 200px;" /></p>
-						<p class="site-stats">
-							<span id="footer-year"></span> &copy; Ben Hota &bull; Last visited: <span id="last-visit">Never</span>
-						</p>
-					</footer>
-
+				</div>
+				<div class="tile-status">
+					<span class="status-dot checking" id="tile-ha-dot"></span>
+					<span id="tile-ha-text">Checking...</span>
+				</div>
+				<span class="tile-arrow">&rarr;</span>
 			</div>
 
-		<!-- BG -->
-			<div id="bg"></div>
+			<!-- 3D Printer -->
+			<div class="dash-tile" data-panel="3D_Printer">
+				<div class="tile-header">
+					<div class="tile-icon printer">🖨️</div>
+					<div class="tile-info">
+						<h3>3D Printer</h3>
+						<p>Ender 3 V2 Neo via Mainsail</p>
+					</div>
+				</div>
+				<div class="tile-status">
+					<span class="status-dot checking" id="tile-printer-dot"></span>
+					<span id="tile-printer-text">Checking...</span>
+				</div>
+				<span class="tile-arrow">&rarr;</span>
+			</div>
 
-		<!-- Scripts -->
-			<script src="assets/js/jquery.min.js"></script>
-			<script src="assets/js/browser.min.js"></script>
-			<script src="assets/js/breakpoints.min.js"></script>
-			<script src="assets/js/util.js"></script>
-			<script src="assets/js/main.js"></script>
-			<script>
-				// ── Date Display (updates once per minute) ──
-				function updateDate() {
-					var now = new Date();
-					var en = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
-					var he = now.toLocaleDateString('he-IL', { year: 'numeric', month: 'numeric', day: 'numeric' });
-					var time = now.toLocaleTimeString('he-IL', { hour: '2-digit', minute: '2-digit' });
-					document.getElementById('date-display').textContent = time + '  ·  ' + en + '  ·  ' + he;
-				}
-				updateDate();
-				setInterval(updateDate, 30000);
+			<!-- Network -->
+			<div class="dash-tile" data-panel="network">
+				<div class="tile-header">
+					<div class="tile-icon network">🌐</div>
+					<div class="tile-info">
+						<h3>Network</h3>
+						<p>Service health &amp; quick links</p>
+					</div>
+				</div>
+				<span class="tile-arrow">&rarr;</span>
+			</div>
 
-				// ── Dynamic Greeting ──
-				(function() {
-					var hour = new Date().getHours();
-					var g;
-					if (hour < 6)       g = 'Late night — the servers never sleep.';
-					else if (hour < 12)  g = 'Good morning! All systems looking good.';
-					else if (hour < 17)  g = 'Good afternoon — everything running smoothly.';
-					else if (hour < 21)  g = 'Good evening! Welcome back home.';
-					else                 g = 'Good night — quick check before bed?';
-					document.getElementById('greeting').textContent = g;
-				})();
+			<!-- Notes -->
+			<div class="dash-tile" data-panel="notes">
+				<div class="tile-header">
+					<div class="tile-icon notes">📝</div>
+					<div class="tile-info">
+						<h3>Notes</h3>
+						<p>Quick notepad saved in browser</p>
+					</div>
+				</div>
+				<span class="tile-arrow">&rarr;</span>
+			</div>
 
-				// ── Typing Animation ──
-				(function() {
-					var text = 'Your home services \u2014 all in one place.';
-					var el = document.getElementById('subtitle');
-					var i = 0;
-					function type() {
-						if (i <= text.length) {
-							el.innerHTML = text.substring(0, i) + '<span class="typing-cursor">|</span>';
-							i++;
-							setTimeout(type, 45);
-						} else {
-							el.textContent = text;
+			<!-- Projects -->
+			<a class="dash-tile" href="/projects/">
+				<div class="tile-header">
+					<div class="tile-icon projects">📂</div>
+					<div class="tile-info">
+						<h3>Projects</h3>
+						<p>Browse all projects</p>
+					</div>
+				</div>
+				<span class="tile-arrow">&rarr;</span>
+			</a>
+
+			<!-- Weather -->
+			<div class="dash-tile" data-panel="weather">
+				<div class="tile-header">
+					<div class="tile-icon weather">🌤️</div>
+					<div class="tile-info">
+						<h3>Weather</h3>
+						<p id="tile-weather-location">Loading...</p>
+					</div>
+				</div>
+				<div class="weather-info">
+					<span class="weather-temp" id="tile-weather-temp">--°</span>
+					<span id="tile-weather-desc">Fetching...</span>
+				</div>
+				<span class="tile-arrow">&rarr;</span>
+			</div>
+
+			<!-- Todos -->
+			<div class="dash-tile" data-panel="todos">
+				<div class="tile-header">
+					<div class="tile-icon todo">✅</div>
+					<div class="tile-info">
+						<h3>Todo List</h3>
+						<p id="tile-todo-count">0 tasks</p>
+					</div>
+				</div>
+				<span class="tile-arrow">&rarr;</span>
+			</div>
+
+			<!-- About -->
+			<div class="dash-tile" data-panel="about">
+				<div class="tile-header">
+					<div class="tile-icon about">ℹ️</div>
+					<div class="tile-info">
+						<h3>About</h3>
+						<p>The Hota family dashboard</p>
+					</div>
+				</div>
+				<span class="tile-arrow">&rarr;</span>
+			</div>
+		</section>
+
+		<!-- Footer -->
+		<footer class="site-footer">
+			<img class="footer-logo" src="images/benhota.png" alt="Ben Hota Logo" />
+			<p class="footer-text">
+				<span id="footer-year"></span> &copy; Ben Hota &bull; Last visited: <span id="last-visit">Never</span>
+			</p>
+		</footer>
+	</div>
+
+	<!-- ═══════════════════════════════════════
+		 MODAL PANELS
+		 ═══════════════════════════════════════ -->
+
+	<!-- Home Assistant Panel -->
+	<div class="modal-overlay" id="panel-Home_Assistant">
+		<div class="modal-panel">
+			<button class="modal-close" onclick="closePanel()">&times;</button>
+			<h2 class="modal-title"><a href="https://home.benhota.xyz" target="_blank">Home Assistant</a></h2>
+			<a class="panel-hero" href="https://home.benhota.xyz" target="_blank">
+				<img src="images/home_assistant.png" alt="Home Assistant Dashboard" />
+			</a>
+			<div class="dash-card">
+				<div class="dash-card-header">
+					<span class="status-dot checking" id="ha-status-dot"></span>
+					<strong id="ha-status-text">Checking...</strong>
+				</div>
+				<p class="response-time" id="ha-response-time"></p>
+				<ul class="feature-list">
+					<li>Smart lighting &amp; climate control</li>
+					<li>Device automation &amp; scenes</li>
+					<li>Energy monitoring dashboard</li>
+					<li>Security camera feeds</li>
+				</ul>
+			</div>
+			<div class="actions-row">
+				<a class="action-btn primary" href="https://home.benhota.xyz" target="_blank">Open Dashboard</a>
+				<a class="action-btn" href="https://home.benhota.xyz/config" target="_blank">Settings</a>
+			</div>
+		</div>
+	</div>
+
+	<!-- 3D Printer Panel -->
+	<div class="modal-overlay" id="panel-3D_Printer">
+		<div class="modal-panel">
+			<button class="modal-close" onclick="closePanel()">&times;</button>
+			<h2 class="modal-title"><a href="https://ender_3_v2_neo.octoeverywhere.com" target="_blank">3D Printer</a></h2>
+			<a class="panel-hero" href="https://ender_3_v2_neo.octoeverywhere.com" target="_blank">
+				<img src="images/logo-mainsail.png" alt="Mainsail 3D Printer Interface" />
+			</a>
+			<div class="dash-card">
+				<div class="dash-card-header">
+					<span class="status-dot checking" id="printer-status-dot"></span>
+					<strong id="printer-status-text">Checking...</strong>
+				</div>
+				<p class="response-time" id="printer-response-time"></p>
+				<ul class="feature-list">
+					<li>Remote print monitoring via OctoEverywhere</li>
+					<li>Mainsail web interface</li>
+					<li>Live webcam feed</li>
+					<li>G-code file management</li>
+				</ul>
+			</div>
+			<div class="actions-row">
+				<a class="action-btn primary" href="https://ender_3_v2_neo.octoeverywhere.com" target="_blank">Open Mainsail</a>
+			</div>
+		</div>
+	</div>
+
+	<!-- Network Panel -->
+	<div class="modal-overlay" id="panel-network">
+		<div class="modal-panel">
+			<button class="modal-close" onclick="closePanel()">&times;</button>
+			<h2 class="modal-title">Network</h2>
+			<div class="dash-card">
+				<div class="dash-card-header">
+					<strong>Service Health</strong>
+				</div>
+				<ul class="feature-list">
+					<li style="gap:0.6rem;"><span class="status-dot checking" id="overview-ha-dot"></span> home.benhota.xyz — <span id="overview-ha-label">Checking...</span></li>
+					<li style="gap:0.6rem;"><span class="status-dot checking" id="overview-printer-dot"></span> OctoEverywhere — <span id="overview-printer-label">Checking...</span></li>
+				</ul>
+				<p style="font-size:0.72rem; color:var(--text-muted); margin-top:0.75rem; margin-bottom:0;">
+					Health checks run on page load. <a href="#" id="recheck-btn" style="color:var(--accent); text-decoration:none; border:none;">Re-check now</a>
+				</p>
+			</div>
+			<div class="dash-card">
+				<div class="dash-card-header">
+					<strong>Quick Links</strong>
+				</div>
+				<div class="actions-row" style="margin-top:0.5rem;">
+					<a class="action-btn" href="https://home.benhota.xyz" target="_blank">Home Assistant</a>
+					<a class="action-btn" href="https://ender_3_v2_neo.octoeverywhere.com" target="_blank">3D Printer</a>
+				</div>
+			</div>
+			<div class="dash-card">
+				<div class="dash-card-header">
+					<strong>Session</strong>
+				</div>
+				<p style="margin-bottom:0;">You've been here for <strong id="session-timer" style="font-family:var(--mono); color:var(--accent);">0s</strong></p>
+			</div>
+		</div>
+	</div>
+
+	<!-- Notes Panel -->
+	<div class="modal-overlay" id="panel-notes">
+		<div class="modal-panel">
+			<button class="modal-close" onclick="closePanel()">&times;</button>
+			<h2 class="modal-title">Notes</h2>
+			<div class="dash-card">
+				<div class="dash-card-header">
+					<strong>Quick Notepad</strong>
+				</div>
+				<p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:0.8rem;">Saved automatically in your browser.</p>
+				<div class="notepad">
+					<textarea id="notepad-input" placeholder="Type your notes here..." spellcheck="false"></textarea>
+					<p class="save-status" id="notepad-save-status">Ready</p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Weather Panel -->
+	<div class="modal-overlay" id="panel-weather">
+		<div class="modal-panel">
+			<button class="modal-close" onclick="closePanel()">&times;</button>
+			<h2 class="modal-title">🌤️ Weather</h2>
+			<div class="dash-card">
+				<div class="dash-card-header">
+					<strong id="weather-city">Loading location...</strong>
+				</div>
+				<div style="display:flex; align-items:center; gap:1rem; margin:0.75rem 0;">
+					<span style="font-size:3rem;" id="weather-icon-big">🌡️</span>
+					<div>
+						<div style="font-size:2rem; font-weight:700;" id="weather-temp-big">--°C</div>
+						<div style="font-size:0.85rem; color:var(--text-secondary);" id="weather-desc-big">Fetching weather...</div>
+					</div>
+				</div>
+				<div class="tech-grid" style="margin-top:0.75rem;">
+					<div class="tech-item">
+						<span class="tech-icon">💨</span>
+						<span id="weather-wind">-- km/h</span>
+					</div>
+					<div class="tech-item">
+						<span class="tech-icon">💧</span>
+						<span id="weather-humidity">--%</span>
+					</div>
+					<div class="tech-item">
+						<span class="tech-icon">🌡️</span>
+						<span id="weather-feels">Feels --°</span>
+					</div>
+					<div class="tech-item">
+						<span class="tech-icon">☁️</span>
+						<span id="weather-clouds">-- %</span>
+					</div>
+				</div>
+			</div>
+			<p style="font-size:0.65rem; color:var(--text-muted); text-align:center; margin-top:0.75rem;">Powered by Open-Meteo (no API key needed)</p>
+		</div>
+	</div>
+
+	<!-- Todo Panel -->
+	<div class="modal-overlay" id="panel-todos">
+		<div class="modal-panel">
+			<button class="modal-close" onclick="closePanel()">&times;</button>
+			<h2 class="modal-title">✅ Todo List</h2>
+			<div class="dash-card">
+				<div class="todo-input-row">
+					<input class="todo-input" id="todo-input" type="text" placeholder="Add a new task..." />
+					<button class="todo-add-btn" id="todo-add-btn">Add</button>
+				</div>
+				<ul class="todo-list" id="todo-list"></ul>
+				<p class="todo-empty" id="todo-empty">No tasks yet — add one above!</p>
+			</div>
+		</div>
+	</div>
+
+	<!-- About Panel -->
+	<div class="modal-overlay" id="panel-about">
+		<div class="modal-panel">
+			<button class="modal-close" onclick="closePanel()">&times;</button>
+			<h2 class="modal-title">About</h2>
+			<div class="panel-hero">
+				<img src="images/pic03.jpg" alt="About" />
+			</div>
+			<div class="dash-card">
+				<p>A personal home dashboard for the Hota family — bringing all self-hosted services under one roof.</p>
+				<div class="tech-grid">
+					<div class="tech-item">
+						<span class="tech-icon">🏠</span>
+						Home Assistant
+					</div>
+					<div class="tech-item">
+						<span class="tech-icon">🖨️</span>
+						Ender 3 V2 Neo
+					</div>
+					<div class="tech-item">
+						<span class="tech-icon">🌐</span>
+						Custom Domain
+					</div>
+					<div class="tech-item">
+						<span class="tech-icon">⚡</span>
+						GitHub Pages
+					</div>
+				</div>
+			</div>
+			<p style="margin-top:1rem; font-size:0.72rem; color:var(--text-muted); text-align:center;">
+				Designed with care &bull; Hosted on GitHub Pages
+			</p>
+		</div>
+	</div>
+
+	<!-- ═══════════════════════════════════════
+		 SCRIPTS
+		 ═══════════════════════════════════════ -->
+	<script>
+		// ══════════════════════════════════════
+		// INTERACTIVE PARTICLE / THREAD CANVAS
+		// ══════════════════════════════════════
+		(function() {
+			var canvas = document.getElementById('particle-canvas');
+			var ctx = canvas.getContext('2d');
+			var mouse = { x: -1000, y: -1000 };
+			var particles = [];
+			var PARTICLE_COUNT = 80;
+			var CONNECT_DIST = 140;
+			var MOUSE_DIST = 200;
+			var animId;
+
+			function resize() {
+				canvas.width = window.innerWidth;
+				canvas.height = window.innerHeight;
+			}
+			window.addEventListener('resize', resize);
+			resize();
+
+			function Particle() {
+				this.x = Math.random() * canvas.width;
+				this.y = Math.random() * canvas.height;
+				this.vx = (Math.random() - 0.5) * 0.4;
+				this.vy = (Math.random() - 0.5) * 0.4;
+				this.r = Math.random() * 1.5 + 0.5;
+			}
+
+			for (var i = 0; i < PARTICLE_COUNT; i++) {
+				particles.push(new Particle());
+			}
+
+			document.addEventListener('mousemove', function(e) {
+				mouse.x = e.clientX;
+				mouse.y = e.clientY;
+				// cursor glow
+				var glow = document.getElementById('cursor-glow');
+				glow.style.left = e.clientX + 'px';
+				glow.style.top = e.clientY + 'px';
+				if (!glow.classList.contains('active')) glow.classList.add('active');
+			});
+			document.addEventListener('mouseleave', function() {
+				mouse.x = -1000;
+				mouse.y = -1000;
+				document.getElementById('cursor-glow').classList.remove('active');
+			});
+
+			function draw() {
+				ctx.clearRect(0, 0, canvas.width, canvas.height);
+				var isLight = document.body.classList.contains('light-mode');
+				var baseColor = isLight ? '99,102,241' : '140,140,255';
+				var mouseColor = '99,102,241';
+
+				for (var i = 0; i < particles.length; i++) {
+					var p = particles[i];
+					p.x += p.vx;
+					p.y += p.vy;
+
+					if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+					if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+
+					// Mouse repulsion
+					var dx = p.x - mouse.x;
+					var dy = p.y - mouse.y;
+					var distMouse = Math.sqrt(dx * dx + dy * dy);
+					if (distMouse < MOUSE_DIST) {
+						var force = (MOUSE_DIST - distMouse) / MOUSE_DIST * 0.02;
+						p.vx += dx * force;
+						p.vy += dy * force;
+					}
+
+					// Dampen velocity
+					p.vx *= 0.998;
+					p.vy *= 0.998;
+
+					// Draw particle
+					ctx.beginPath();
+					ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+					ctx.fillStyle = 'rgba(' + baseColor + ', 0.3)';
+					ctx.fill();
+
+					// Connect lines - particles to particles
+					for (var j = i + 1; j < particles.length; j++) {
+						var p2 = particles[j];
+						var ddx = p.x - p2.x;
+						var ddy = p.y - p2.y;
+						var dist = Math.sqrt(ddx * ddx + ddy * ddy);
+						if (dist < CONNECT_DIST) {
+							var alpha = (1 - dist / CONNECT_DIST) * 0.15;
+							ctx.beginPath();
+							ctx.moveTo(p.x, p.y);
+							ctx.lineTo(p2.x, p2.y);
+							ctx.strokeStyle = 'rgba(' + baseColor + ',' + alpha + ')';
+							ctx.lineWidth = 0.6;
+							ctx.stroke();
 						}
 					}
-					setTimeout(type, 600);
-				})();
 
-				// ── Real Service Health Checks ──
-				function checkService(url, dotIds, textIds, responseTimeId) {
-					var dots = dotIds.map(function(id) { return document.getElementById(id); });
-					var texts = textIds.map(function(id) { return document.getElementById(id); });
-					var responseEl = responseTimeId ? document.getElementById(responseTimeId) : null;
-
-					dots.forEach(function(d) { if (d) d.className = 'status-dot checking'; });
-					texts.forEach(function(t) { if (t) t.textContent = 'Checking...'; });
-
-					var start = performance.now();
-					fetch(url, { mode: 'no-cors', cache: 'no-store' })
-						.then(function() {
-							var ms = Math.round(performance.now() - start);
-							dots.forEach(function(d) { if (d) d.className = 'status-dot online'; });
-							texts.forEach(function(t) { if (t) t.textContent = 'Reachable'; });
-							if (responseEl) responseEl.textContent = 'Response: ~' + ms + 'ms';
-						})
-						.catch(function() {
-							dots.forEach(function(d) { if (d) d.className = 'status-dot offline'; });
-							texts.forEach(function(t) { if (t) t.textContent = 'Unreachable'; });
-							if (responseEl) responseEl.textContent = 'Could not connect';
-						});
+					// Connect to mouse with brighter lines
+					if (distMouse < MOUSE_DIST) {
+						var malpha = (1 - distMouse / MOUSE_DIST) * 0.4;
+						ctx.beginPath();
+						ctx.moveTo(p.x, p.y);
+						ctx.lineTo(mouse.x, mouse.y);
+						ctx.strokeStyle = 'rgba(' + mouseColor + ',' + malpha + ')';
+						ctx.lineWidth = 0.8;
+						ctx.stroke();
+					}
 				}
 
-				function runHealthChecks() {
-					checkService('https://home.benhota.xyz',
-						['ha-status-dot', 'overview-ha-dot'],
-						['ha-status-text', 'overview-ha-label'],
-						'ha-response-time');
-					checkService('https://ender_3_v2_neo.octoeverywhere.com',
-						['printer-status-dot', 'overview-printer-dot'],
-						['printer-status-text', 'overview-printer-label'],
-						'printer-response-time');
-				}
-				runHealthChecks();
+				animId = requestAnimationFrame(draw);
+			}
+			draw();
+		})();
 
-				document.getElementById('recheck-btn').addEventListener('click', function(e) {
+		// ── Panel system ──
+		var currentPanel = null;
+
+		function openPanel(id) {
+			closePanel();
+			var panel = document.getElementById('panel-' + id);
+			if (!panel) return;
+			currentPanel = panel;
+			panel.style.display = 'flex';
+			// Force reflow for animation
+			void panel.offsetHeight;
+			requestAnimationFrame(function() {
+				panel.classList.add('active');
+			});
+			document.body.style.overflow = 'hidden';
+		}
+
+		function closePanel() {
+			if (!currentPanel) return;
+			currentPanel.classList.remove('active');
+			var p = currentPanel;
+			setTimeout(function() {
+				if (!p.classList.contains('active')) {
+					p.style.display = 'none';
+				}
+			}, 350);
+			currentPanel = null;
+			document.body.style.overflow = '';
+		}
+
+		// Nav buttons & tiles
+		document.querySelectorAll('[data-panel]').forEach(function(el) {
+			el.addEventListener('click', function(e) {
+				e.preventDefault();
+				openPanel(this.getAttribute('data-panel'));
+			});
+		});
+
+		// Close on overlay click
+		document.querySelectorAll('.modal-overlay').forEach(function(overlay) {
+			overlay.addEventListener('click', function(e) {
+				if (e.target === overlay) closePanel();
+			});
+		});
+
+		// Close on Escape
+		document.addEventListener('keydown', function(e) {
+			if (e.key === 'Escape') closePanel();
+		});
+
+		// ── Date Display (updates every 30 seconds) ──
+		function updateDate() {
+			var now = new Date();
+			var en = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+			var he = now.toLocaleDateString('he-IL', { year: 'numeric', month: 'numeric', day: 'numeric' });
+			var time = now.toLocaleTimeString('he-IL', { hour: '2-digit', minute: '2-digit' });
+			document.getElementById('date-display').textContent = time + '  \u00B7  ' + en + '  \u00B7  ' + he;
+		}
+		updateDate();
+		setInterval(updateDate, 30000);
+
+		// ── Dynamic Greeting ──
+		(function() {
+			var hour = new Date().getHours();
+			var g;
+			if (hour < 6)       g = 'Late night \u2014 the servers never sleep.';
+			else if (hour < 12) g = 'Good morning! All systems looking good.';
+			else if (hour < 17) g = 'Good afternoon \u2014 everything running smoothly.';
+			else if (hour < 21) g = 'Good evening! Welcome back home.';
+			else                g = 'Good night \u2014 quick check before bed?';
+			document.getElementById('greeting').textContent = g;
+		})();
+
+		// ── Typing Animation ──
+		(function() {
+			var text = 'Your home services \u2014 all in one place.';
+			var el = document.getElementById('subtitle');
+			var i = 0;
+			function type() {
+				if (i <= text.length) {
+					el.innerHTML = text.substring(0, i) + '<span class="typing-cursor">|</span>';
+					i++;
+					setTimeout(type, 40);
+				} else {
+					el.textContent = text;
+				}
+			}
+			setTimeout(type, 500);
+		})();
+
+		// ── Health Checks ──
+		function checkService(url, dotIds, textIds, responseTimeId) {
+			var dots = dotIds.map(function(id) { return document.getElementById(id); });
+			var texts = textIds.map(function(id) { return document.getElementById(id); });
+			var responseEl = responseTimeId ? document.getElementById(responseTimeId) : null;
+
+			dots.forEach(function(d) { if (d) d.className = 'status-dot checking'; });
+			texts.forEach(function(t) { if (t) t.textContent = 'Checking...'; });
+
+			var start = performance.now();
+			fetch(url, { mode: 'no-cors', cache: 'no-store' })
+				.then(function() {
+					var ms = Math.round(performance.now() - start);
+					dots.forEach(function(d) { if (d) d.className = 'status-dot online'; });
+					texts.forEach(function(t) { if (t) t.textContent = 'Online'; });
+					if (responseEl) responseEl.textContent = '~' + ms + 'ms';
+				})
+				.catch(function() {
+					dots.forEach(function(d) { if (d) d.className = 'status-dot offline'; });
+					texts.forEach(function(t) { if (t) t.textContent = 'Offline'; });
+					if (responseEl) responseEl.textContent = 'unreachable';
+				});
+		}
+
+		function runHealthChecks() {
+			checkService('https://home.benhota.xyz',
+				['ha-status-dot', 'overview-ha-dot', 'tile-ha-dot'],
+				['ha-status-text', 'overview-ha-label', 'tile-ha-text'],
+				'ha-response-time');
+			checkService('https://ender_3_v2_neo.octoeverywhere.com',
+				['printer-status-dot', 'overview-printer-dot', 'tile-printer-dot'],
+				['printer-status-text', 'overview-printer-label', 'tile-printer-text'],
+				'printer-response-time');
+		}
+		runHealthChecks();
+
+		document.getElementById('recheck-btn').addEventListener('click', function(e) {
+			e.preventDefault();
+			runHealthChecks();
+		});
+
+		// ── Keyboard Shortcuts ──
+		document.addEventListener('keydown', function(e) {
+			if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+			var map = { '1': 'Home_Assistant', '2': '3D_Printer', '3': 'network', '4': 'notes', '5': 'todos', '6': 'weather', '7': 'about' };
+			if (map[e.key]) { e.preventDefault(); openPanel(map[e.key]); }
+		});
+
+		// ── Session Timer ──
+		(function() {
+			var start = Date.now();
+			setInterval(function() {
+				var s = Math.floor((Date.now() - start) / 1000);
+				var m = Math.floor(s / 60);
+				var sec = s % 60;
+				var el = document.getElementById('session-timer');
+				if (el) el.textContent = m > 0 ? m + 'm ' + sec + 's' : sec + 's';
+			}, 1000);
+		})();
+
+		// ── Last Visit ──
+		(function() {
+			var key = 'benhota_last_visit';
+			var last = localStorage.getItem(key);
+			var el = document.getElementById('last-visit');
+			if (last && el) {
+				var d = new Date(parseInt(last));
+				el.textContent = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+			}
+			localStorage.setItem(key, Date.now().toString());
+		})();
+
+		// ── Notepad ──
+		(function() {
+			var key = 'benhota_notepad';
+			var input = document.getElementById('notepad-input');
+			var status = document.getElementById('notepad-save-status');
+			var timeout;
+			var saved = localStorage.getItem(key);
+			if (saved) input.value = saved;
+			input.addEventListener('input', function() {
+				clearTimeout(timeout);
+				status.textContent = 'Typing...';
+				timeout = setTimeout(function() {
+					localStorage.setItem(key, input.value);
+					status.textContent = 'Saved \u2713';
+				}, 500);
+			});
+		})();
+
+		// ── Theme Toggle ──
+		(function() {
+			var btn = document.getElementById('theme-toggle');
+			var key = 'benhota_theme';
+			if (localStorage.getItem(key) === 'light') {
+				document.body.classList.add('light-mode');
+				btn.textContent = '\u2600\uFE0F';
+			}
+			btn.addEventListener('click', function() {
+				document.body.classList.toggle('light-mode');
+				var isLight = document.body.classList.contains('light-mode');
+				btn.textContent = isLight ? '\u2600\uFE0F' : '\uD83C\uDF19';
+				localStorage.setItem(key, isLight ? 'light' : 'dark');
+			});
+		})();
+
+		// ── Footer Year ──
+		document.getElementById('footer-year').textContent = new Date().getFullYear();
+
+		// ── Open panel from URL hash ──
+		(function() {
+			var hash = window.location.hash.replace('#', '');
+			if (hash) openPanel(hash);
+		})();
+
+		// ══════════════════════════════════════
+		// COMMAND PALETTE (Ctrl+K)
+		// ══════════════════════════════════════
+		(function() {
+			var overlay = document.getElementById('cmd-overlay');
+			var input = document.getElementById('cmd-input');
+			var results = document.getElementById('cmd-results');
+			var activeIdx = -1;
+
+			var commands = [
+				{ icon: '🏠', label: 'Home Assistant', action: function() { openPanel('Home_Assistant'); }, key: '1' },
+				{ icon: '🖨️', label: '3D Printer', action: function() { openPanel('3D_Printer'); }, key: '2' },
+				{ icon: '🌐', label: 'Network', action: function() { openPanel('network'); }, key: '3' },
+				{ icon: '📝', label: 'Notes', action: function() { openPanel('notes'); }, key: '4' },
+				{ icon: '✅', label: 'Todo List', action: function() { openPanel('todos'); }, key: '5' },
+				{ icon: '🌤️', label: 'Weather', action: function() { openPanel('weather'); }, key: '6' },
+				{ icon: '📂', label: 'Projects', action: function() { window.location.href = '/projects/'; } },
+				{ icon: 'ℹ️', label: 'About', action: function() { openPanel('about'); } },
+				{ icon: '🔄', label: 'Re-check Services', action: function() { runHealthChecks(); } },
+				{ icon: '🌙', label: 'Toggle Theme', action: function() { document.getElementById('theme-toggle').click(); } },
+			];
+
+			function openCmd() {
+				overlay.classList.add('active');
+				input.value = '';
+				render('');
+				setTimeout(function() { input.focus(); }, 50);
+			}
+			function closeCmd() {
+				overlay.classList.remove('active');
+				activeIdx = -1;
+			}
+
+			function render(query) {
+				var q = query.toLowerCase();
+				var filtered = commands.filter(function(c) { return c.label.toLowerCase().indexOf(q) !== -1; });
+				results.innerHTML = '';
+				activeIdx = filtered.length > 0 ? 0 : -1;
+				filtered.forEach(function(c, i) {
+					var div = document.createElement('div');
+					div.className = 'cmd-item' + (i === 0 ? ' active' : '');
+					div.innerHTML = '<span class="cmd-item-icon">' + c.icon + '</span>' +
+						'<span class="cmd-item-label">' + c.label + '</span>' +
+						(c.key ? '<span class="cmd-item-kbd">' + c.key + '</span>' : '');
+					div.addEventListener('click', function() { closeCmd(); c.action(); });
+					results.appendChild(div);
+				});
+			}
+
+			input.addEventListener('input', function() { render(this.value); });
+
+			input.addEventListener('keydown', function(e) {
+				var items = results.querySelectorAll('.cmd-item');
+				if (e.key === 'ArrowDown') {
 					e.preventDefault();
-					runHealthChecks();
+					if (activeIdx < items.length - 1) activeIdx++;
+				} else if (e.key === 'ArrowUp') {
+					e.preventDefault();
+					if (activeIdx > 0) activeIdx--;
+				} else if (e.key === 'Enter') {
+					e.preventDefault();
+					if (items[activeIdx]) items[activeIdx].click();
+					return;
+				}
+				items.forEach(function(it, idx) {
+					it.classList.toggle('active', idx === activeIdx);
 				});
+				if (items[activeIdx]) items[activeIdx].scrollIntoView({ block: 'nearest' });
+			});
 
-				// ── Keyboard Shortcuts ──
-				document.addEventListener('keydown', function(e) {
-					if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
-					var map = { '1': '#Home_Assistant', '2': '#3D_Printer', '3': '#network', '4': '#notes', '5': '#about' };
-					if (map[e.key]) { e.preventDefault(); window.location.hash = map[e.key]; }
+			document.addEventListener('keydown', function(e) {
+				if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+					e.preventDefault();
+					if (overlay.classList.contains('active')) closeCmd();
+					else openCmd();
+				}
+				if (e.key === 'Escape' && overlay.classList.contains('active')) {
+					e.stopPropagation();
+					closeCmd();
+				}
+			});
+
+			overlay.addEventListener('click', function(e) {
+				if (e.target === overlay) closeCmd();
+			});
+		})();
+
+		// ══════════════════════════════════════
+		// WEATHER (Open-Meteo — no API key)
+		// ══════════════════════════════════════
+		(function() {
+			var weatherIcons = {
+				0: '☀️', 1: '🌤️', 2: '⛅', 3: '☁️',
+				45: '🌫️', 48: '🌫️',
+				51: '🌦️', 53: '🌦️', 55: '🌧️',
+				61: '🌧️', 63: '🌧️', 65: '🌧️',
+				71: '🌨️', 73: '🌨️', 75: '🌨️',
+				77: '🌨️', 80: '🌧️', 81: '🌧️', 82: '🌧️',
+				85: '🌨️', 86: '🌨️',
+				95: '⛈️', 96: '⛈️', 99: '⛈️'
+			};
+			var weatherDesc = {
+				0: 'Clear sky', 1: 'Mainly clear', 2: 'Partly cloudy', 3: 'Overcast',
+				45: 'Foggy', 48: 'Rime fog',
+				51: 'Light drizzle', 53: 'Drizzle', 55: 'Dense drizzle',
+				61: 'Slight rain', 63: 'Rain', 65: 'Heavy rain',
+				71: 'Slight snow', 73: 'Snow', 75: 'Heavy snow',
+				77: 'Snow grains', 80: 'Rain showers', 81: 'Rain showers', 82: 'Violent rain',
+				85: 'Snow showers', 86: 'Heavy snow showers',
+				95: 'Thunderstorm', 96: 'Hail thunderstorm', 99: 'Heavy hail storm'
+			};
+
+			function fetchWeather(lat, lon, city) {
+				var url = 'https://api.open-meteo.com/v1/forecast?latitude=' + lat + '&longitude=' + lon +
+					'&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m,cloud_cover' +
+					'&timezone=auto';
+				fetch(url)
+					.then(function(r) { return r.json(); })
+					.then(function(data) {
+						var c = data.current;
+						var code = c.weather_code;
+						var icon = weatherIcons[code] || '🌡️';
+						var desc = weatherDesc[code] || 'Unknown';
+
+						// Tile
+						var tLoc = document.getElementById('tile-weather-location');
+						var tTemp = document.getElementById('tile-weather-temp');
+						var tDesc = document.getElementById('tile-weather-desc');
+						if (tLoc) tLoc.textContent = city;
+						if (tTemp) tTemp.textContent = Math.round(c.temperature_2m) + '°C';
+						if (tDesc) tDesc.textContent = icon + ' ' + desc;
+
+						// Panel
+						var pCity = document.getElementById('weather-city');
+						var pIcon = document.getElementById('weather-icon-big');
+						var pTemp = document.getElementById('weather-temp-big');
+						var pDesc = document.getElementById('weather-desc-big');
+						var pWind = document.getElementById('weather-wind');
+						var pHum = document.getElementById('weather-humidity');
+						var pFeels = document.getElementById('weather-feels');
+						var pClouds = document.getElementById('weather-clouds');
+
+						if (pCity) pCity.textContent = city;
+						if (pIcon) pIcon.textContent = icon;
+						if (pTemp) pTemp.textContent = Math.round(c.temperature_2m) + '°C';
+						if (pDesc) pDesc.textContent = desc;
+						if (pWind) pWind.textContent = c.wind_speed_10m + ' km/h';
+						if (pHum) pHum.textContent = c.relative_humidity_2m + '%';
+						if (pFeels) pFeels.textContent = 'Feels ' + Math.round(c.apparent_temperature) + '°';
+						if (pClouds) pClouds.textContent = c.cloud_cover + '% clouds';
+					})
+					.catch(function() {
+						var tDesc = document.getElementById('tile-weather-desc');
+						if (tDesc) tDesc.textContent = 'Weather unavailable';
+					});
+			}
+
+			// Try geolocation, fall back to Tel Aviv
+			if (navigator.geolocation) {
+				navigator.geolocation.getCurrentPosition(
+					function(pos) {
+						// Reverse geocode city name from Open-Meteo geocoding
+						fetch('https://geocoding-api.open-meteo.com/v1/search?name=&latitude=' + pos.coords.latitude + '&longitude=' + pos.coords.longitude + '&count=1')
+							.catch(function() { return null; });
+						fetchWeather(pos.coords.latitude, pos.coords.longitude, 'Your Location');
+					},
+					function() { fetchWeather(32.08, 34.78, 'Tel Aviv'); },
+					{ timeout: 5000 }
+				);
+			} else {
+				fetchWeather(32.08, 34.78, 'Tel Aviv');
+			}
+		})();
+
+		// ══════════════════════════════════════
+		// TODO LIST (localStorage)
+		// ══════════════════════════════════════
+		(function() {
+			var STORAGE_KEY = 'benhota_todos';
+			var list = document.getElementById('todo-list');
+			var input = document.getElementById('todo-input');
+			var addBtn = document.getElementById('todo-add-btn');
+			var emptyMsg = document.getElementById('todo-empty');
+			var tileCount = document.getElementById('tile-todo-count');
+
+			function loadTodos() {
+				try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }
+				catch(e) { return []; }
+			}
+			function saveTodos(todos) {
+				localStorage.setItem(STORAGE_KEY, JSON.stringify(todos));
+			}
+
+			function updateTileCount(todos) {
+				var pending = todos.filter(function(t) { return !t.done; }).length;
+				var total = todos.length;
+				if (tileCount) {
+					if (total === 0) tileCount.textContent = '0 tasks';
+					else tileCount.textContent = pending + ' pending / ' + total + ' total';
+				}
+			}
+
+			function render() {
+				var todos = loadTodos();
+				list.innerHTML = '';
+				emptyMsg.style.display = todos.length === 0 ? 'block' : 'none';
+				updateTileCount(todos);
+
+				todos.forEach(function(todo, idx) {
+					var li = document.createElement('li');
+					li.className = 'todo-item' + (todo.done ? ' done' : '');
+
+					var check = document.createElement('button');
+					check.className = 'todo-check';
+					check.innerHTML = todo.done ? '✓' : '';
+					check.addEventListener('click', function() {
+						var t = loadTodos();
+						t[idx].done = !t[idx].done;
+						saveTodos(t);
+						render();
+					});
+
+					var text = document.createElement('span');
+					text.className = 'todo-text';
+					text.textContent = todo.text;
+
+					var del = document.createElement('button');
+					del.className = 'todo-delete';
+					del.innerHTML = '✕';
+					del.addEventListener('click', function() {
+						var t = loadTodos();
+						t.splice(idx, 1);
+						saveTodos(t);
+						render();
+					});
+
+					li.appendChild(check);
+					li.appendChild(text);
+					li.appendChild(del);
+					list.appendChild(li);
 				});
+			}
 
-				// ── Session Timer ──
-				(function() {
-					var start = Date.now();
-					setInterval(function() {
-						var s = Math.floor((Date.now() - start) / 1000);
-						var m = Math.floor(s / 60);
-						var sec = s % 60;
-						var el = document.getElementById('session-timer');
-						if (el) el.textContent = m > 0 ? m + 'm ' + sec + 's' : sec + 's';
-					}, 1000);
-				})();
+			function addTodo() {
+				var val = input.value.trim();
+				if (!val) return;
+				var todos = loadTodos();
+				todos.push({ text: val, done: false });
+				saveTodos(todos);
+				input.value = '';
+				render();
+			}
 
-				// ── Last Visit ──
-				(function() {
-					var key = 'benhota_last_visit';
-					var last = localStorage.getItem(key);
-					var el = document.getElementById('last-visit');
-					if (last && el) {
-						var d = new Date(parseInt(last));
-						el.textContent = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
-					}
-					localStorage.setItem(key, Date.now().toString());
-				})();
+			addBtn.addEventListener('click', addTodo);
+			input.addEventListener('keydown', function(e) {
+				if (e.key === 'Enter') addTodo();
+			});
 
-				// ── Notepad ──
-				(function() {
-					var key = 'benhota_notepad';
-					var input = document.getElementById('notepad-input');
-					var status = document.getElementById('notepad-save-status');
-					var timeout;
-					var saved = localStorage.getItem(key);
-					if (saved) input.value = saved;
-					input.addEventListener('input', function() {
-						clearTimeout(timeout);
-						status.textContent = 'Typing...';
-						timeout = setTimeout(function() {
-							localStorage.setItem(key, input.value);
-							status.textContent = 'Saved \u2713';
-						}, 500);
-					});
-				})();
+			render();
+		})();
 
-				// ── Theme Toggle ──
-				(function() {
-					var btn = document.getElementById('theme-toggle');
-					var key = 'benhota_theme';
-					if (localStorage.getItem(key) === 'light') {
-						document.body.classList.add('light-mode');
-						btn.textContent = '\u2600\uFE0F';
-					}
-					btn.addEventListener('click', function() {
-						document.body.classList.toggle('light-mode');
-						var isLight = document.body.classList.contains('light-mode');
-						btn.textContent = isLight ? '\u2600\uFE0F' : '\uD83C\uDF19';
-						localStorage.setItem(key, isLight ? 'light' : 'dark');
-					});
-				})();
+		// ══════════════════════════════════════
+		// VISIT COUNTER
+		// ══════════════════════════════════════
+		(function() {
+			var key = 'benhota_visit_count';
+			var count = parseInt(localStorage.getItem(key) || '0') + 1;
+			localStorage.setItem(key, count.toString());
+			var el = document.getElementById('visit-count');
+			if (el) el.textContent = count;
+		})();
 
-				// ── Footer Year ──
-				document.getElementById('footer-year').textContent = new Date().getFullYear();
-			</script>
-
-	</body>
+		// ══════════════════════════════════════
+		// DAILY MOTIVATIONAL QUOTE
+		// ══════════════════════════════════════
+		(function() {
+			var quotes = [
+				'"The best way to predict the future is to invent it." — Alan Kay',
+				'"Simplicity is the ultimate sophistication." — Leonardo da Vinci',
+				'"Talk is cheap. Show me the code." — Linus Torvalds',
+				'"First, solve the problem. Then, write the code." — John Johnson',
+				'"Any sufficiently advanced technology is indistinguishable from magic." — Arthur C. Clarke',
+				'"The only way to do great work is to love what you do." — Steve Jobs',
+				'"In the middle of difficulty lies opportunity." — Albert Einstein',
+				'"It does not matter how slowly you go as long as you do not stop." — Confucius',
+				'"Home is not a place, it\'s a feeling." — Cecelia Ahern',
+				'"The secret of getting ahead is getting started." — Mark Twain',
+				'"Automation is cost cutting by tightening the corners." — Haresh Sippy',
+				'"Make it work, make it right, make it fast." — Kent Beck',
+				'"The home should be the treasure chest of living." — Le Corbusier',
+			];
+			// Pick based on day-of-year so it changes daily
+			var now = new Date();
+			var start = new Date(now.getFullYear(), 0, 0);
+			var dayOfYear = Math.floor((now - start) / 86400000);
+			var quote = quotes[dayOfYear % quotes.length];
+			var el = document.getElementById('daily-quote');
+			if (el) el.textContent = quote;
+		})();
+	</script>
+</body>
 </html>
